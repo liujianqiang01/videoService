@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.winterchen.dao.ITOrderMapper" >
+  <sql id="Base_Column_List" >
+    id, order_code, order_state, order_price, activity_id, user_id, vip_code, vip_state, 
+    vip_start_time, vip_end_time
+  </sql>
+  
+	<!--批量添加-->
+  <insert id="insertBatch" parameterType="java.util.List" >
+    insert into t_order (id, 
+      order_code, order_state, order_price, activity_id, 
+      user_id, vip_code, vip_state, vip_start_time, vip_end_time
+      )
+    values
+		<foreach collection="list" item="item" separator=",">
+			(
+			#{item.id}, 
+      #{item.orderCode}, #{item.orderState}, #{item.orderPrice}, #{item.activityId}, 
+      #{item.userId}, #{item.vipCode}, #{item.vipState}, #{item.vipStartTime}, #{item.vipEndTime}
+      )
+		</foreach>
+  </insert>
+  
+	<!--根据主键Id删除-->
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_order
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  
+	<!--根据主键Id查询-->
+  <select id="selectByPrimaryKey" resultType="com.winterchen.model.TOrder" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_order
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+	<!--根据主键Id修改-->
+  <update id="updateByPrimaryKeySelective" parameterType="com.winterchen.model.TOrder" >
+    update t_order
+    <set >
+      <if test="orderCode != null" >
+        order_code = #{orderCode,jdbcType=INTEGER},
+      </if>
+      <if test="orderState != null" >
+        order_state = #{orderState,jdbcType=INTEGER},
+      </if>
+      <if test="orderPrice != null" >
+        order_price = #{orderPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="activityId != null" >
+        activity_id = #{activityId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="vipCode != null" >
+        vip_code = #{vipCode,jdbcType=VARCHAR},
+      </if>
+      <if test="vipState != null" >
+        vip_state = #{vipState,jdbcType=INTEGER},
+      </if>
+      <if test="vipStartTime != null" >
+        vip_start_time = #{vipStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="vipEndTime != null" >
+        vip_end_time = #{vipEndTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+	<!--条件查询，返回集合-->
+  <select id="selectListByWhere" resultType="com.winterchen.model.TOrder" parameterType="com.winterchen.model.TOrder" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_order
+    <where >
+      <if test="orderCode != null" >
+        and order_code = #{orderCode,jdbcType=INTEGER}
+      </if>
+      <if test="orderState != null" >
+        and order_state = #{orderState,jdbcType=INTEGER}
+      </if>
+      <if test="orderPrice != null" >
+        and order_price = #{orderPrice,jdbcType=DECIMAL}
+      </if>
+      <if test="activityId != null" >
+        and activity_id = #{activityId,jdbcType=INTEGER}
+      </if>
+      <if test="userId != null" >
+        and user_id = #{userId,jdbcType=INTEGER}
+      </if>
+      <if test="vipCode != null" >
+        and vip_code = #{vipCode,jdbcType=VARCHAR}
+      </if>
+      <if test="vipState != null" >
+        and vip_state = #{vipState,jdbcType=INTEGER}
+      </if>
+      <if test="vipStartTime != null" >
+        and vip_start_time = #{vipStartTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="vipEndTime != null" >
+        and vip_end_time = #{vipEndTime,jdbcType=TIMESTAMP}
+      </if>
+    </where>
+  </select>
+  
+	<!--条件查询-->
+  <select id="selectByWhere" resultType="com.winterchen.model.TOrder" parameterType="com.winterchen.model.TOrder" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_order
+    <where >
+      <if test="orderCode != null" >
+        and order_code = #{orderCode,jdbcType=INTEGER}
+      </if>
+      <if test="orderState != null" >
+        and order_state = #{orderState,jdbcType=INTEGER}
+      </if>
+      <if test="orderPrice != null" >
+        and order_price = #{orderPrice,jdbcType=DECIMAL}
+      </if>
+      <if test="activityId != null" >
+        and activity_id = #{activityId,jdbcType=INTEGER}
+      </if>
+      <if test="userId != null" >
+        and user_id = #{userId,jdbcType=INTEGER}
+      </if>
+      <if test="vipCode != null" >
+        and vip_code = #{vipCode,jdbcType=VARCHAR}
+      </if>
+      <if test="vipState != null" >
+        and vip_state = #{vipState,jdbcType=INTEGER}
+      </if>
+      <if test="vipStartTime != null" >
+        and vip_start_time = #{vipStartTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="vipEndTime != null" >
+        and vip_end_time = #{vipEndTime,jdbcType=TIMESTAMP}
+      </if>
+    </where>
+  </select>
+</mapper>

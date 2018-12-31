@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.winterchen.dao.ITMerchantMapper" >
+  <sql id="Base_Column_List" >
+    id, menchant_id, menchant_name
+  </sql>
+  
+	<!--批量添加-->
+  <insert id="insertBatch" parameterType="java.util.List" >
+    insert into t_merchant (id, 
+      menchant_id, menchant_name)
+    values
+		<foreach collection="list" item="item" separator=",">
+			(
+			#{item.id}, 
+      #{item.menchantId}, #{item.menchantName})
+		</foreach>
+  </insert>
+  
+	<!--根据主键Id删除-->
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_merchant
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  
+	<!--根据主键Id查询-->
+  <select id="selectByPrimaryKey" resultType="com.winterchen.model.TMerchant" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_merchant
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+	<!--根据主键Id修改-->
+  <update id="updateByPrimaryKeySelective" parameterType="com.winterchen.model.TMerchant" >
+    update t_merchant
+    <set >
+      <if test="menchantId != null" >
+        menchant_id = #{menchantId,jdbcType=VARCHAR},
+      </if>
+      <if test="menchantName != null" >
+        menchant_name = #{menchantName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+	<!--条件查询，返回集合-->
+  <select id="selectListByWhere" resultType="com.winterchen.model.TMerchant" parameterType="com.winterchen.model.TMerchant" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_merchant
+    <where >
+      <if test="menchantId != null" >
+        and menchant_id = #{menchantId,jdbcType=VARCHAR}
+      </if>
+      <if test="menchantName != null" >
+        and menchant_name = #{menchantName,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+  
+	<!--条件查询-->
+  <select id="selectByWhere" resultType="com.winterchen.model.TMerchant" parameterType="com.winterchen.model.TMerchant" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_merchant
+    <where >
+      <if test="menchantId != null" >
+        and menchant_id = #{menchantId,jdbcType=VARCHAR}
+      </if>
+      <if test="menchantName != null" >
+        and menchant_name = #{menchantName,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+</mapper>

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.winterchen.dao.ITActivityMapper" >
+  <sql id="Base_Column_List" >
+    id, userId, activity_type, activity_state, create_time, end_time
+  </sql>
+  
+	<!--批量添加-->
+  <insert id="insertBatch" parameterType="java.util.List" >
+    insert into t_activity (id, 
+      userId, activity_type, activity_state, create_time, 
+      end_time)
+    values
+		<foreach collection="list" item="item" separator=",">
+			(
+			#{item.id}, 
+      #{item.userid}, #{item.activityType}, #{item.activityState}, #{item.createTime}, 
+      #{item.endTime})
+		</foreach>
+  </insert>
+  
+	<!--根据主键Id删除-->
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_activity
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  
+	<!--根据主键Id查询-->
+  <select id="selectByPrimaryKey" resultType="com.winterchen.model.TActivity" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_activity
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+	<!--根据主键Id修改-->
+  <update id="updateByPrimaryKeySelective" parameterType="com.winterchen.model.TActivity" >
+    update t_activity
+    <set >
+      <if test="userid != null" >
+        userId = #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="activityType != null" >
+        activity_type = #{activityType,jdbcType=INTEGER},
+      </if>
+      <if test="activityState != null" >
+        activity_state = #{activityState,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null" >
+        end_time = #{endTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+	<!--条件查询，返回集合-->
+  <select id="selectListByWhere" resultType="com.winterchen.model.TActivity" parameterType="com.winterchen.model.TActivity" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_activity
+    <where >
+      <if test="userid != null" >
+        and userId = #{userid,jdbcType=INTEGER}
+      </if>
+      <if test="activityType != null" >
+        and activity_type = #{activityType,jdbcType=INTEGER}
+      </if>
+      <if test="activityState != null" >
+        and activity_state = #{activityState,jdbcType=INTEGER}
+      </if>
+      <if test="createTime != null" >
+        and create_time = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="endTime != null" >
+        and end_time = #{endTime,jdbcType=TIMESTAMP}
+      </if>
+    </where>
+  </select>
+  
+	<!--条件查询-->
+  <select id="selectByWhere" resultType="com.winterchen.model.TActivity" parameterType="com.winterchen.model.TActivity" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_activity
+    <where >
+      <if test="userid != null" >
+        and userId = #{userid,jdbcType=INTEGER}
+      </if>
+      <if test="activityType != null" >
+        and activity_type = #{activityType,jdbcType=INTEGER}
+      </if>
+      <if test="activityState != null" >
+        and activity_state = #{activityState,jdbcType=INTEGER}
+      </if>
+      <if test="createTime != null" >
+        and create_time = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="endTime != null" >
+        and end_time = #{endTime,jdbcType=TIMESTAMP}
+      </if>
+    </where>
+  </select>
+</mapper>
