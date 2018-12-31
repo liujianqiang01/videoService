@@ -1,7 +1,7 @@
-package com.winterchen.weChatPay.controller;
+package com.video.weChatPay.controller;
 
 
-import com.winterchen.weChatPay.common.Configure;
+import com.video.weChatPay.common.Configure;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;

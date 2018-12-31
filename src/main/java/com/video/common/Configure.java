@@ -1,4 +1,4 @@
-package com.winterchen.weChatPay.common;
+package com.video.weChatPay.common;
 
 public class Configure {
 	private static String key = "你的商户的api秘钥";

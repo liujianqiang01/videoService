@@ -1,4 +1,4 @@
-package com.winterchen.weChatPay.common;
+package com.video.weChatPay.common;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;

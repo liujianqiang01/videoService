@@ -1,6 +1,6 @@
-package com.winterchen.weChatPay.controller;
+package com.video.weChatPay.controller;
 
-import com.winterchen.weChatPay.common.StreamUtil;
+import com.video.weChatPay.common.StreamUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
