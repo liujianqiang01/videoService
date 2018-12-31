@@ -1,6 +1,6 @@
-package com.winterchen.dao;
+package com.video.dao;
 
-import com.winterchen.model.TActivity;
+import com.video.model.TActivity;
 import java.util.List;
 
 public interface ITActivityMapper {

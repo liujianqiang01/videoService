@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.winterchen.dao.ITUserMapper" >
+<mapper namespace="com.video.dao.ITUserMapper" >
   <sql id="Base_Column_List" >
     user_id, user_name, password, phone, open_id, weixin_name, user_type, menchant_id
   </sql>
@@ -26,7 +26,7 @@
   </delete>
   
 	<!--根据主键Id查询-->
-  <select id="selectByPrimaryKey" resultType="com.winterchen.model.TUser" parameterType="java.lang.Integer" >
+  <select id="selectByPrimaryKey" resultType="com.video.model.TUser" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
     from t_user
@@ -34,7 +34,7 @@
   </select>
   
 	<!--根据主键Id修改-->
-  <update id="updateByPrimaryKeySelective" parameterType="com.winterchen.model.TUser" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.video.model.TUser" >
     update t_user
     <set >
       <if test="userName != null" >
@@ -63,7 +63,7 @@
   </update>
   
 	<!--条件查询，返回集合-->
-  <select id="selectListByWhere" resultType="com.winterchen.model.TUser" parameterType="com.winterchen.model.TUser" >
+  <select id="selectListByWhere" resultType="com.video.model.TUser" parameterType="com.video.model.TUser" >
     select 
     <include refid="Base_Column_List" />
     from t_user
@@ -93,7 +93,7 @@
   </select>
   
 	<!--条件查询-->
-  <select id="selectByWhere" resultType="com.winterchen.model.TUser" parameterType="com.winterchen.model.TUser" >
+  <select id="selectByWhere" resultType="com.video.model.TUser" parameterType="com.video.model.TUser" >
     select 
     <include refid="Base_Column_List" />
     from t_user

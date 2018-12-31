@@ -4,11 +4,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.winterchen</groupId>
-	<artifactId>springboot2-mybatis-demo</artifactId>
+	<artifactId>video_service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>springboot2-mybatis-demo</name>
+	<name>video_service</name>
 	<description>Demo project for Spring Boot</description>
 
 	<parent>

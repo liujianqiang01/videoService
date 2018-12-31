@@ -1,6 +1,6 @@
-package com.winterchen.dao;
+package com.video.dao;
 
-import com.winterchen.model.TMerchant;
+import com.video.model.TMerchant;
 import java.util.List;
 
 public interface ITMerchantMapper {

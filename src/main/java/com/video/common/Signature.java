@@ -1,7 +1,7 @@
-package com.video.weChatPay.common;
+package com.video.common;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.video.weChatPay.controller.GetOpenIdController;
+import com.video.controller.GetOpenIdController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

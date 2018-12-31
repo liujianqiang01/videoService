@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.winterchen.dao.ITMerchantMapper" >
+<mapper namespace="com.video.dao.ITMerchantMapper" >
   <sql id="Base_Column_List" >
     id, menchant_id, menchant_name
   </sql>
@@ -24,7 +24,7 @@
   </delete>
   
 	<!--根据主键Id查询-->
-  <select id="selectByPrimaryKey" resultType="com.winterchen.model.TMerchant" parameterType="java.lang.Integer" >
+  <select id="selectByPrimaryKey" resultType="com.video.model.TMerchant" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
     from t_merchant
@@ -32,7 +32,7 @@
   </select>
   
 	<!--根据主键Id修改-->
-  <update id="updateByPrimaryKeySelective" parameterType="com.winterchen.model.TMerchant" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.video.model.TMerchant" >
     update t_merchant
     <set >
       <if test="menchantId != null" >
@@ -46,7 +46,7 @@
   </update>
   
 	<!--条件查询，返回集合-->
-  <select id="selectListByWhere" resultType="com.winterchen.model.TMerchant" parameterType="com.winterchen.model.TMerchant" >
+  <select id="selectListByWhere" resultType="com.video.model.TMerchant" parameterType="com.video.model.TMerchant" >
     select 
     <include refid="Base_Column_List" />
     from t_merchant
@@ -61,7 +61,7 @@
   </select>
   
 	<!--条件查询-->
-  <select id="selectByWhere" resultType="com.winterchen.model.TMerchant" parameterType="com.winterchen.model.TMerchant" >
+  <select id="selectByWhere" resultType="com.video.model.TMerchant" parameterType="com.video.model.TMerchant" >
     select 
     <include refid="Base_Column_List" />
     from t_merchant

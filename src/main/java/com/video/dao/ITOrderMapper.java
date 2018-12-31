@@ -1,6 +1,6 @@
-package com.winterchen.dao;
+package com.video.dao;
 
-import com.winterchen.model.TOrder;
+import com.video.model.TOrder;
 import java.util.List;
 
 public interface ITOrderMapper {

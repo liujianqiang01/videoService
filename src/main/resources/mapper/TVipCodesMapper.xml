@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.winterchen.dao.ITVipCodesMapper" >
+<mapper namespace="com.video.dao.ITVipCodesMapper" >
   <sql id="Base_Column_List" >
     id, vip_code, vip_state, merchant_id
   </sql>
@@ -24,7 +24,7 @@
   </delete>
   
 	<!--根据主键Id查询-->
-  <select id="selectByPrimaryKey" resultType="com.winterchen.model.TVipCodes" parameterType="java.lang.Integer" >
+  <select id="selectByPrimaryKey" resultType="com.video.model.TVipCodes" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
     from t_vip_codes
@@ -32,7 +32,7 @@
   </select>
   
 	<!--根据主键Id修改-->
-  <update id="updateByPrimaryKeySelective" parameterType="com.winterchen.model.TVipCodes" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.video.model.TVipCodes" >
     update t_vip_codes
     <set >
       <if test="vipCode != null" >
@@ -49,7 +49,7 @@
   </update>
   
 	<!--条件查询，返回集合-->
-  <select id="selectListByWhere" resultType="com.winterchen.model.TVipCodes" parameterType="com.winterchen.model.TVipCodes" >
+  <select id="selectListByWhere" resultType="com.video.model.TVipCodes" parameterType="com.video.model.TVipCodes" >
     select 
     <include refid="Base_Column_List" />
     from t_vip_codes
@@ -67,7 +67,7 @@
   </select>
   
 	<!--条件查询-->
-  <select id="selectByWhere" resultType="com.winterchen.model.TVipCodes" parameterType="com.winterchen.model.TVipCodes" >
+  <select id="selectByWhere" resultType="com.video.model.TVipCodes" parameterType="com.video.model.TVipCodes" >
     select 
     <include refid="Base_Column_List" />
     from t_vip_codes

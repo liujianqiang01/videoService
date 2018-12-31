@@ -1,10 +1,10 @@
-package com.winterchen.service.impl;
+package com.video.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.winterchen.dao.UserDao;
-import com.winterchen.model.UserDomain;
-import com.winterchen.service.UserService;
+import com.video.dao.UserDao;
+import com.video.model.UserDomain;
+import com.video.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

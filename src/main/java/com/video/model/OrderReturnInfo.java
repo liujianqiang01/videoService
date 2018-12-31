@@ -1,4 +1,4 @@
-package com.video.weChatPay.model;
+package com.video.model;
 
 public class OrderReturnInfo {
     private String return_code;

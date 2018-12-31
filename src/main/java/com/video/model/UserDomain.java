@@ -1,4 +1,4 @@
-package com.winterchen.model;
+package com.video.model;
 
 public class UserDomain {
     private Integer userId;

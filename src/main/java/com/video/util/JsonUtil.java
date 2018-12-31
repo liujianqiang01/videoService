@@ -1,4 +1,4 @@
-package com.winterchen.util;
+package com.video.util;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;

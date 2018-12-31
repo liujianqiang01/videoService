@@ -1,6 +1,6 @@
-package com.winterchen.dao;
+package com.video.dao;
 
-import com.winterchen.model.TVipCodes;
+import com.video.model.TVipCodes;
 import java.util.List;
 
 public interface ITVipCodesMapper {

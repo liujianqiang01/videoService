@@ -1,14 +1,14 @@
-package com.video.weChatPay.controller;
+package com.video.controller;
 
 
 import com.alibaba.fastjson.JSONObject;
 import com.thoughtworks.xstream.XStream;
-import com.video.weChatPay.common.Configure;
-import com.video.weChatPay.common.HttpRequest;
-import com.video.weChatPay.common.RandomStringGenerator;
-import com.video.weChatPay.common.Signature;
-import com.video.weChatPay.model.OrderInfo;
-import com.video.weChatPay.model.OrderReturnInfo;
+import com.video.common.Configure;
+import com.video.common.HttpRequest;
+import com.video.common.RandomStringGenerator;
+import com.video.common.Signature;
+import com.video.model.OrderInfo;
+import com.video.model.OrderReturnInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;

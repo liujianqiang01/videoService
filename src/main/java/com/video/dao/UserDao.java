@@ -1,8 +1,7 @@
-package com.winterchen.dao;
+package com.video.dao;
 
 
-import com.winterchen.model.UserDomain;
-import org.apache.ibatis.annotations.Mapper;
+import com.video.model.UserDomain;
 
 import java.util.List;
 

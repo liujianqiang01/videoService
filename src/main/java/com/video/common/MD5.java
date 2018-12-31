@@ -1,4 +1,4 @@
-package com.video.weChatPay.common;
+package com.video.common;
 
 import java.security.MessageDigest;
 

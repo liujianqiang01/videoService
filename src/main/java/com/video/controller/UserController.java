@@ -1,7 +1,7 @@
-package com.winterchen.controller;
+package com.video.controller;
 
-import com.winterchen.model.UserDomain;
-import com.winterchen.service.UserService;
+import com.video.model.UserDomain;
+import com.video.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;

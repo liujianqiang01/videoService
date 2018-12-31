@@ -1,6 +1,6 @@
-package com.winterchen.dao;
+package com.video.dao;
 
-import com.winterchen.model.TUser;
+import com.video.model.TUser;
 import java.util.List;
 
 public interface ITUserMapper {

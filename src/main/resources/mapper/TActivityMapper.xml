@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.winterchen.dao.ITActivityMapper" >
+<mapper namespace="com.video.dao.ITActivityMapper" >
   <sql id="Base_Column_List" >
     id, userId, activity_type, activity_state, create_time, end_time
   </sql>
@@ -26,7 +26,7 @@
   </delete>
   
 	<!--根据主键Id查询-->
-  <select id="selectByPrimaryKey" resultType="com.winterchen.model.TActivity" parameterType="java.lang.Integer" >
+  <select id="selectByPrimaryKey" resultType="com.video.model.TActivity" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
     from t_activity
@@ -34,7 +34,7 @@
   </select>
   
 	<!--根据主键Id修改-->
-  <update id="updateByPrimaryKeySelective" parameterType="com.winterchen.model.TActivity" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.video.model.TActivity" >
     update t_activity
     <set >
       <if test="userid != null" >
@@ -57,7 +57,7 @@
   </update>
   
 	<!--条件查询，返回集合-->
-  <select id="selectListByWhere" resultType="com.winterchen.model.TActivity" parameterType="com.winterchen.model.TActivity" >
+  <select id="selectListByWhere" resultType="com.video.model.TActivity" parameterType="com.video.model.TActivity" >
     select 
     <include refid="Base_Column_List" />
     from t_activity
@@ -81,7 +81,7 @@
   </select>
   
 	<!--条件查询-->
-  <select id="selectByWhere" resultType="com.winterchen.model.TActivity" parameterType="com.winterchen.model.TActivity" >
+  <select id="selectByWhere" resultType="com.video.model.TActivity" parameterType="com.video.model.TActivity" >
     select 
     <include refid="Base_Column_List" />
     from t_activity
