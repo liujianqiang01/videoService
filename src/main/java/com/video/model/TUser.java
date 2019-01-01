@@ -33,6 +33,9 @@ public class TUser implements Serializable {
      //区
     private String country;
 
+    //用户头像
+    private String avatarUrl;
+
     private static final long serialVersionUID = 1L;
 
     public Integer getUserId() {
@@ -113,6 +116,14 @@ public class TUser implements Serializable {
 
     public void setCountry(String country) {
         this.country = country == null ? null : country.trim();
+    }
+
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
+
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
     }
 
     @Override

@@ -6,6 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.video.common.Configure;
 import com.video.model.Ao.HeaderInfo;
 import com.video.model.TUser;
+import com.video.service.UserService;
 import com.video.util.ApiEnum;
 import com.video.util.ApiResponse;
 import com.video.util.TokenBean;
@@ -18,6 +19,7 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,7 +32,8 @@ import java.util.UUID;
 @RequestMapping("/login")
 public class LoginController {
 	private static Logger log = LoggerFactory.getLogger(LoginController.class);
-
+	@Autowired
+	UserService userService;
 	@PostMapping("/getToken")
 	@ResponseBody
 	public ApiResponse getToken(HttpServletRequest request) throws Exception{
@@ -88,6 +91,7 @@ public class LoginController {
 		TokenUtil.setHeader(tokenBean);
 		//放入session中
 		request.getSession().setAttribute(token, tokenBean);
+		userService.addUserInfo(tokenBean);
 		return token;
 	}
 
@@ -102,12 +106,9 @@ public class LoginController {
 		tokenBean.setNickName(userInfo.getNickName());
 		tokenBean.setGender(userInfo.getGender());
 		request.getSession().setAttribute(tokenBean.getToken(),tokenBean);
-		//todo 入库
+		tokenBean.setAvatarUrl(userInfo.getAvatarUrl());
+		userService.updateUserInfo(tokenBean);
 		return ApiResponse.success(token);
-	}
-
-	private void addUser(){
-
 	}
 
 }

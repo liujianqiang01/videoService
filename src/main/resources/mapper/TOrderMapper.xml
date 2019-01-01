@@ -2,23 +2,23 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.video.dao.ITOrderMapper" >
   <sql id="Base_Column_List" >
-    id, order_code, order_state, order_price, merchant_id, user_id, vip_code, vip_state, 
-    vip_start_time, vip_end_time
+    id, order_code, order_state, order_price, merchant_id, open_id, vip_code, vip_state, 
+    vip_start_time, vip_end_time, third_oeder_code
   </sql>
   
 	<!--批量添加-->
   <insert id="insertBatch" parameterType="java.util.List" >
     insert into t_order (id, 
       order_code, order_state, order_price, merchant_id, 
-      user_id, vip_code, vip_state, vip_start_time, vip_end_time
-      )
+      open_id, vip_code, vip_state, vip_start_time, vip_end_time, 
+      third_oeder_code)
     values
 		<foreach collection="list" item="item" separator=",">
 			(
 			#{item.id}, 
       #{item.orderCode}, #{item.orderState}, #{item.orderPrice}, #{item.merchantId}, 
-      #{item.userId}, #{item.vipCode}, #{item.vipState}, #{item.vipStartTime}, #{item.vipEndTime}
-      )
+      #{item.openId}, #{item.vipCode}, #{item.vipState}, #{item.vipStartTime}, #{item.vipEndTime}, 
+      #{item.thirdOederCode})
 		</foreach>
   </insert>
   
@@ -41,7 +41,7 @@
     update t_order
     <set >
       <if test="orderCode != null" >
-        order_code = #{orderCode,jdbcType=INTEGER},
+        order_code = #{orderCode,jdbcType=VARCHAR},
       </if>
       <if test="orderState != null" >
         order_state = #{orderState,jdbcType=INTEGER},
@@ -52,8 +52,8 @@
       <if test="merchantId != null" >
         merchant_id = #{merchantId,jdbcType=VARCHAR},
       </if>
-      <if test="userId != null" >
-        user_id = #{userId,jdbcType=INTEGER},
+      <if test="openId != null" >
+        open_id = #{openId,jdbcType=VARCHAR},
       </if>
       <if test="vipCode != null" >
         vip_code = #{vipCode,jdbcType=VARCHAR},
@@ -67,6 +67,9 @@
       <if test="vipEndTime != null" >
         vip_end_time = #{vipEndTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="thirdOederCode != null" >
+        third_oeder_code = #{thirdOederCode,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -78,7 +81,7 @@
     from t_order
     <where >
       <if test="orderCode != null" >
-        and order_code = #{orderCode,jdbcType=INTEGER}
+        and order_code = #{orderCode,jdbcType=VARCHAR}
       </if>
       <if test="orderState != null" >
         and order_state = #{orderState,jdbcType=INTEGER}
@@ -89,8 +92,8 @@
       <if test="merchantId != null" >
         and merchant_id = #{merchantId,jdbcType=VARCHAR}
       </if>
-      <if test="userId != null" >
-        and user_id = #{userId,jdbcType=INTEGER}
+      <if test="openId != null" >
+        and open_id = #{openId,jdbcType=VARCHAR}
       </if>
       <if test="vipCode != null" >
         and vip_code = #{vipCode,jdbcType=VARCHAR}
@@ -103,6 +106,9 @@
       </if>
       <if test="vipEndTime != null" >
         and vip_end_time = #{vipEndTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="thirdOederCode != null" >
+        and third_oeder_code = #{thirdOederCode,jdbcType=VARCHAR}
       </if>
     </where>
   </select>
@@ -114,7 +120,7 @@
     from t_order
     <where >
       <if test="orderCode != null" >
-        and order_code = #{orderCode,jdbcType=INTEGER}
+        and order_code = #{orderCode,jdbcType=VARCHAR}
       </if>
       <if test="orderState != null" >
         and order_state = #{orderState,jdbcType=INTEGER}
@@ -125,8 +131,8 @@
       <if test="merchantId != null" >
         and merchant_id = #{merchantId,jdbcType=VARCHAR}
       </if>
-      <if test="userId != null" >
-        and user_id = #{userId,jdbcType=INTEGER}
+      <if test="openId != null" >
+        and open_id = #{openId,jdbcType=VARCHAR}
       </if>
       <if test="vipCode != null" >
         and vip_code = #{vipCode,jdbcType=VARCHAR}
@@ -139,6 +145,9 @@
       </if>
       <if test="vipEndTime != null" >
         and vip_end_time = #{vipEndTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="thirdOederCode != null" >
+        and third_oeder_code = #{thirdOederCode,jdbcType=VARCHAR}
       </if>
     </where>
   </select>

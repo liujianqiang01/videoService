@@ -9,7 +9,7 @@ public class TOrder implements Serializable {
     private Integer id;
 
      //订单编码
-    private Integer orderCode;
+    private String orderCode;
 
      //订单状态 0-新建，1-待支付，2-支付成功
     private Integer orderState;
@@ -21,7 +21,7 @@ public class TOrder implements Serializable {
     private String merchantId;
 
      //用户Id
-    private Integer userId;
+    private String openId;
 
      //vip编码
     private String vipCode;
@@ -35,6 +35,9 @@ public class TOrder implements Serializable {
      //vip结束时间
     private Date vipEndTime;
 
+     //三方订单
+    private String thirdOederCode;
+
     private static final long serialVersionUID = 1L;
 
     public Integer getId() {
@@ -45,12 +48,12 @@ public class TOrder implements Serializable {
         this.id = id;
     }
 
-    public Integer getOrderCode() {
+    public String getOrderCode() {
         return orderCode;
     }
 
-    public void setOrderCode(Integer orderCode) {
-        this.orderCode = orderCode;
+    public void setOrderCode(String orderCode) {
+        this.orderCode = orderCode == null ? null : orderCode.trim();
     }
 
     public Integer getOrderState() {
@@ -77,12 +80,12 @@ public class TOrder implements Serializable {
         this.merchantId = merchantId == null ? null : merchantId.trim();
     }
 
-    public Integer getUserId() {
-        return userId;
+    public String getOpenId() {
+        return openId;
     }
 
-    public void setUserId(Integer userId) {
-        this.userId = userId;
+    public void setOpenId(String openId) {
+        this.openId = openId == null ? null : openId.trim();
     }
 
     public String getVipCode() {
@@ -117,6 +120,14 @@ public class TOrder implements Serializable {
         this.vipEndTime = vipEndTime;
     }
 
+    public String getThirdOederCode() {
+        return thirdOederCode;
+    }
+
+    public void setThirdOederCode(String thirdOederCode) {
+        this.thirdOederCode = thirdOederCode == null ? null : thirdOederCode.trim();
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -128,11 +139,12 @@ public class TOrder implements Serializable {
         sb.append(", orderState=").append(orderState);
         sb.append(", orderPrice=").append(orderPrice);
         sb.append(", merchantId=").append(merchantId);
-        sb.append(", userId=").append(userId);
+        sb.append(", openId=").append(openId);
         sb.append(", vipCode=").append(vipCode);
         sb.append(", vipState=").append(vipState);
         sb.append(", vipStartTime=").append(vipStartTime);
         sb.append(", vipEndTime=").append(vipEndTime);
+        sb.append(", thirdOederCode=").append(thirdOederCode);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

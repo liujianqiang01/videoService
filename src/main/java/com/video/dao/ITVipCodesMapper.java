@@ -33,4 +33,6 @@ public interface ITVipCodesMapper {
     *条件查询
     */
     TVipCodes selectByWhere(TVipCodes record);
+
+    TVipCodes selectOneByWhere(Integer vipType,Integer state,int limit);
 }

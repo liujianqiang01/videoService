@@ -22,6 +22,9 @@ public class TokenBean {
     // 性别 0：未知、1：男、2：女
     private Integer gender;
 
+    //用户头像
+    private String avatarUrl;
+
     public String getToken() {
         return token;
     }
@@ -76,6 +79,14 @@ public class TokenBean {
 
     public void setGender(Integer gender) {
         this.gender = gender;
+    }
+
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
+
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
     }
 
     @Override

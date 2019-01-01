@@ -13,6 +13,9 @@ public class TVipPrice implements Serializable {
      //vip价格表
     private BigDecimal vipPrice;
 
+     //有效期 /天
+    private Integer indate;
+
     private static final long serialVersionUID = 1L;
 
     public Integer getId() {
@@ -39,6 +42,14 @@ public class TVipPrice implements Serializable {
         this.vipPrice = vipPrice;
     }
 
+    public Integer getIndate() {
+        return indate;
+    }
+
+    public void setIndate(Integer indate) {
+        this.indate = indate;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -48,6 +59,7 @@ public class TVipPrice implements Serializable {
         sb.append(", id=").append(id);
         sb.append(", vipType=").append(vipType);
         sb.append(", vipPrice=").append(vipPrice);
+        sb.append(", indate=").append(indate);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

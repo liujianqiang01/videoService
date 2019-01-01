@@ -3,7 +3,7 @@
 <mapper namespace="com.video.dao.ITUserMapper" >
   <sql id="Base_Column_List" >
     user_id, phone, open_id, nick_name, user_type, menchant_id, gende, province, city, 
-    country
+    country,avatar_url
   </sql>
   
 	<!--批量添加-->
@@ -64,6 +64,9 @@
       </if>
       <if test="country != null" >
         country = #{country,jdbcType=VARCHAR},
+      </if>
+      <if test="avatarUrl != null" >
+        avatar_url = #{avatarUrl,jdbcType=VARCHAR},
       </if>
     </set>
     where user_id = #{userId,jdbcType=INTEGER}
