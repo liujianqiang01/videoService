@@ -16,7 +16,7 @@ import java.io.IOException;
 @Controller
 public class PayResult{
 	private static final long serialVersionUID = 1L;
-	private static Logger log = LoggerFactory.getLogger(GetOpenIdController.class);
+	private static Logger log = LoggerFactory.getLogger(LoginController.class);
 
 	@RequestMapping("/payResult")
 	@ResponseBody

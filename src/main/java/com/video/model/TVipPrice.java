@@ -1,16 +1,17 @@
 package com.video.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
-public class TMerchant implements Serializable {
-     //主键
+public class TVipPrice implements Serializable {
+     //
     private Integer id;
 
-     //商户id
-    private String menchantId;
+     //vip类型 0-免费试用，1-月卡，2-季卡，3-年卡
+    private Integer vipType;
 
-     //商户名称
-    private String menchantName;
+     //vip价格表
+    private BigDecimal vipPrice;
 
     private static final long serialVersionUID = 1L;
 
@@ -22,20 +23,20 @@ public class TMerchant implements Serializable {
         this.id = id;
     }
 
-    public String getMenchantId() {
-        return menchantId;
+    public Integer getVipType() {
+        return vipType;
     }
 
-    public void setMenchantId(String menchantId) {
-        this.menchantId = menchantId == null ? null : menchantId.trim();
+    public void setVipType(Integer vipType) {
+        this.vipType = vipType;
     }
 
-    public String getMenchantName() {
-        return menchantName;
+    public BigDecimal getVipPrice() {
+        return vipPrice;
     }
 
-    public void setMenchantName(String menchantName) {
-        this.menchantName = menchantName == null ? null : menchantName.trim();
+    public void setVipPrice(BigDecimal vipPrice) {
+        this.vipPrice = vipPrice;
     }
 
     @Override
@@ -45,8 +46,8 @@ public class TMerchant implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", menchantId=").append(menchantId);
-        sb.append(", menchantName=").append(menchantName);
+        sb.append(", vipType=").append(vipType);
+        sb.append(", vipPrice=").append(vipPrice);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

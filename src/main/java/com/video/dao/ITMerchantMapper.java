@@ -1,6 +1,7 @@
 package com.video.dao;
 
 import com.video.model.TMerchant;
+
 import java.util.List;
 
 public interface ITMerchantMapper {

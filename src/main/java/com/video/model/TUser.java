@@ -6,12 +6,6 @@ public class TUser implements Serializable {
      //用户id
     private Integer userId;
 
-     //用户名
-    private String userName;
-
-     //
-    private String password;
-
      //电话
     private String phone;
 
@@ -19,13 +13,25 @@ public class TUser implements Serializable {
     private String openId;
 
      //微信昵称
-    private String weixinName;
+    private String nickName;
 
      //用户类型 0-普通用户，1-商户
     private Integer userType;
 
      //商户Id
     private String menchantId;
+
+     //性别 0-未知、1-男、2-女
+    private Integer gender;
+
+     //省
+    private String province;
+
+     //市
+    private String city;
+
+     //区
+    private String country;
 
     private static final long serialVersionUID = 1L;
 
@@ -35,22 +41,6 @@ public class TUser implements Serializable {
 
     public void setUserId(Integer userId) {
         this.userId = userId;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName == null ? null : userName.trim();
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password == null ? null : password.trim();
     }
 
     public String getPhone() {
@@ -69,12 +59,12 @@ public class TUser implements Serializable {
         this.openId = openId == null ? null : openId.trim();
     }
 
-    public String getWeixinName() {
-        return weixinName;
+    public String getNickName() {
+        return nickName;
     }
 
-    public void setWeixinName(String weixinName) {
-        this.weixinName = weixinName == null ? null : weixinName.trim();
+    public void setNickName(String nickName) {
+        this.nickName = nickName == null ? null : nickName.trim();
     }
 
     public Integer getUserType() {
@@ -93,6 +83,38 @@ public class TUser implements Serializable {
         this.menchantId = menchantId == null ? null : menchantId.trim();
     }
 
+    public Integer getGender() {
+        return gender;
+    }
+
+    public void setGender(Integer gender) {
+        this.gender = gender;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province == null ? null : province.trim();
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city == null ? null : city.trim();
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country == null ? null : country.trim();
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -100,13 +122,15 @@ public class TUser implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", userId=").append(userId);
-        sb.append(", userName=").append(userName);
-        sb.append(", password=").append(password);
         sb.append(", phone=").append(phone);
         sb.append(", openId=").append(openId);
-        sb.append(", weixinName=").append(weixinName);
+        sb.append(", nickName=").append(nickName);
         sb.append(", userType=").append(userType);
         sb.append(", menchantId=").append(menchantId);
+        sb.append(", gende=").append(gender);
+        sb.append(", province=").append(province);
+        sb.append(", city=").append(city);
+        sb.append(", country=").append(country);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

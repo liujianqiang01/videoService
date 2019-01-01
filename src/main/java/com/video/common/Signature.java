@@ -1,7 +1,7 @@
 package com.video.common;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.video.controller.GetOpenIdController;
+import com.video.controller.LoginController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,7 +17,7 @@ import java.util.Map;
  *
  */
 public class Signature {
-    private static Logger log = LoggerFactory.getLogger(GetOpenIdController.class);
+    private static Logger log = LoggerFactory.getLogger(LoginController.class);
 	/**
      * 签名算法
      * @param o 要参与签名的数据对象

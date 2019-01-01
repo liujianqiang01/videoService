@@ -1,6 +1,7 @@
 package com.video.dao;
 
 import com.video.model.TUser;
+
 import java.util.List;
 
 public interface ITUserMapper {

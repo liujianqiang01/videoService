@@ -2,21 +2,21 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.video.dao.ITOrderMapper" >
   <sql id="Base_Column_List" >
-    id, order_code, order_state, order_price, activity_id, user_id, vip_code, vip_state, 
+    id, order_code, order_state, order_price, merchant_id, user_id, vip_code, vip_state, 
     vip_start_time, vip_end_time
   </sql>
   
 	<!--批量添加-->
   <insert id="insertBatch" parameterType="java.util.List" >
     insert into t_order (id, 
-      order_code, order_state, order_price, activity_id, 
+      order_code, order_state, order_price, merchant_id, 
       user_id, vip_code, vip_state, vip_start_time, vip_end_time
       )
     values
 		<foreach collection="list" item="item" separator=",">
 			(
 			#{item.id}, 
-      #{item.orderCode}, #{item.orderState}, #{item.orderPrice}, #{item.activityId}, 
+      #{item.orderCode}, #{item.orderState}, #{item.orderPrice}, #{item.merchantId}, 
       #{item.userId}, #{item.vipCode}, #{item.vipState}, #{item.vipStartTime}, #{item.vipEndTime}
       )
 		</foreach>
@@ -49,8 +49,8 @@
       <if test="orderPrice != null" >
         order_price = #{orderPrice,jdbcType=DECIMAL},
       </if>
-      <if test="activityId != null" >
-        activity_id = #{activityId,jdbcType=INTEGER},
+      <if test="merchantId != null" >
+        merchant_id = #{merchantId,jdbcType=VARCHAR},
       </if>
       <if test="userId != null" >
         user_id = #{userId,jdbcType=INTEGER},
@@ -86,8 +86,8 @@
       <if test="orderPrice != null" >
         and order_price = #{orderPrice,jdbcType=DECIMAL}
       </if>
-      <if test="activityId != null" >
-        and activity_id = #{activityId,jdbcType=INTEGER}
+      <if test="merchantId != null" >
+        and merchant_id = #{merchantId,jdbcType=VARCHAR}
       </if>
       <if test="userId != null" >
         and user_id = #{userId,jdbcType=INTEGER}
@@ -122,8 +122,8 @@
       <if test="orderPrice != null" >
         and order_price = #{orderPrice,jdbcType=DECIMAL}
       </if>
-      <if test="activityId != null" >
-        and activity_id = #{activityId,jdbcType=INTEGER}
+      <if test="merchantId != null" >
+        and merchant_id = #{merchantId,jdbcType=VARCHAR}
       </if>
       <if test="userId != null" >
         and user_id = #{userId,jdbcType=INTEGER}

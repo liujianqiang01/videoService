@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.video.common.Configure;
 import com.video.common.RandomStringGenerator;
 import com.video.common.Signature;
-import com.video.model.SignInfo;
+import com.video.model.Ao.SignInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 public class Sign {
 	private static final long serialVersionUID = 1L;
-	private static Logger log = LoggerFactory.getLogger(GetOpenIdController.class);
+	private static Logger log = LoggerFactory.getLogger(LoginController.class);
 
 	@PostMapping("/sign")
 	@ResponseBody

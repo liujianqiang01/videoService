@@ -1,4 +1,6 @@
-package com.video.model;
+package com.video.model.Ao;
+
+import java.math.BigDecimal;
 
 /**
  * 预订单
@@ -14,7 +16,7 @@ public class OrderInfo {
 	private String sign;// 签名
 	private String body;// 商品描述
 	private String out_trade_no;// 商户订单号
-	private int total_fee;// 标价金额 ,单位为分
+	private BigDecimal total_fee;// 标价金额 ,单位为分
 	private String spbill_create_ip;// 终端IP
 	private String notify_url;// 通知地址
 	private String trade_type;// 交易类型
@@ -84,11 +86,11 @@ public class OrderInfo {
 		this.out_trade_no = out_trade_no;
 	}
 
-	public int getTotal_fee() {
+	public BigDecimal getTotal_fee() {
 		return total_fee;
 	}
 
-	public void setTotal_fee(int total_fee) {
+	public void setTotal_fee(BigDecimal total_fee) {
 		this.total_fee = total_fee;
 	}
 

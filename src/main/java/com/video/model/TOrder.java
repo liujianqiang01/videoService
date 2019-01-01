@@ -17,8 +17,8 @@ public class TOrder implements Serializable {
      //订单金额
     private BigDecimal orderPrice;
 
-     //促销id
-    private Integer activityId;
+     //商户Id
+    private String merchantId;
 
      //用户Id
     private Integer userId;
@@ -69,12 +69,12 @@ public class TOrder implements Serializable {
         this.orderPrice = orderPrice;
     }
 
-    public Integer getActivityId() {
-        return activityId;
+    public String getMerchantId() {
+        return merchantId;
     }
 
-    public void setActivityId(Integer activityId) {
-        this.activityId = activityId;
+    public void setMerchantId(String merchantId) {
+        this.merchantId = merchantId == null ? null : merchantId.trim();
     }
 
     public Integer getUserId() {
@@ -127,7 +127,7 @@ public class TOrder implements Serializable {
         sb.append(", orderCode=").append(orderCode);
         sb.append(", orderState=").append(orderState);
         sb.append(", orderPrice=").append(orderPrice);
-        sb.append(", activityId=").append(activityId);
+        sb.append(", merchantId=").append(merchantId);
         sb.append(", userId=").append(userId);
         sb.append(", vipCode=").append(vipCode);
         sb.append(", vipState=").append(vipState);

@@ -1,4 +1,4 @@
-package com.video.model;
+package com.video.model.Ao;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 

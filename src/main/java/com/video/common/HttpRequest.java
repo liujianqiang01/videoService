@@ -55,7 +55,7 @@ public class HttpRequest {
         //设置请求器的配置
         RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(socketTimeout).setConnectTimeout(connectTimeout).build();
         httpPost.setConfig(requestConfig);
-        
+
         HttpClient httpClient = HttpClients.createDefault();
         HttpResponse response = httpClient.execute(httpPost);
         HttpEntity entity = response.getEntity();

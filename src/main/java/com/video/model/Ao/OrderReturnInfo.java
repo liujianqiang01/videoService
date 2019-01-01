@@ -1,4 +1,4 @@
-package com.video.model;
+package com.video.model.Ao;
 
 public class OrderReturnInfo {
     private String return_code;
