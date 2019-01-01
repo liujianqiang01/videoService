@@ -27,7 +27,7 @@ import java.math.BigDecimal;
  * 统一下单接口
  */
 @Controller
-public class Order {
+public class OrderController {
 	private static final long serialVersionUID = 1L;
 	private static Logger log = LoggerFactory.getLogger(LoginController.class);
 
@@ -67,7 +67,7 @@ public class Order {
 			if(!"SUCCESS".equals(returnInfo.getReturn_code())){
 				return ApiResponse.fail(ApiEnum.PARAM_ERROR);
 			}
-			json.put("prepay_id", returnInfo.getPrepay_id());
+			json.put("prepayId", returnInfo.getPrepay_id());
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.error("-------", e);

@@ -14,7 +14,7 @@ import java.io.IOException;
  * 接收支付结果
  */
 @Controller
-public class PayResult{
+public class PayResultController {
 	private static final long serialVersionUID = 1L;
 	private static Logger log = LoggerFactory.getLogger(LoginController.class);
 

@@ -17,13 +17,13 @@ import javax.servlet.http.HttpServletRequest;
  * 再签名
  */
 @Controller
-public class Sign {
+public class PayFromController {
 	private static final long serialVersionUID = 1L;
 	private static Logger log = LoggerFactory.getLogger(LoginController.class);
 
-	@PostMapping("/sign")
+	@PostMapping("/getPayForm")
 	@ResponseBody
-	public Object sign(HttpServletRequest requset) throws IllegalAccessException {
+	public Object getPayForm(HttpServletRequest requset) throws IllegalAccessException {
 		String repay_id = requset.getParameter("repay_id");
 		SignInfo signInfo = new SignInfo();
 		signInfo.setAppId(Configure.getAppID());

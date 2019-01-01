@@ -106,4 +106,8 @@ public class LoginController {
 		return ApiResponse.success(token);
 	}
 
+	private void addUser(){
+
+	}
+
 }
