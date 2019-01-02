@@ -2,21 +2,22 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.video.dao.ITUserMapper" >
   <sql id="Base_Column_List" >
-    user_id, phone, open_id, nick_name, user_type, menchant_id, gende, province, city, 
-    country,avatar_url
+    user_id as userId, phone, open_id as openId, nick_name as nickName, user_type as userType,
+    menchant_id as menchantId, gender, province, city,
+    country,avatar_url as avatarUrl
   </sql>
   
 	<!--批量添加-->
   <insert id="insertBatch" parameterType="java.util.List" >
     insert into t_user (user_id, 
       phone, open_id, nick_name, user_type, menchant_id, 
-      gende, province, city, country)
+      gender, province, city, country)
     values
 		<foreach collection="list" item="item" separator=",">
 			(
 			#{item.userId}, 
       #{item.phone}, #{item.openId}, #{item.nickName}, #{item.userType}, #{item.menchantId}, 
-      #{item.gende}, #{item.province}, #{item.city}, #{item.country})
+      #{item.gender}, #{item.province}, #{item.city}, #{item.country})
 		</foreach>
   </insert>
   
@@ -53,8 +54,8 @@
       <if test="menchantId != null" >
         menchant_id = #{menchantId,jdbcType=VARCHAR},
       </if>
-      <if test="gende != null" >
-        gende = #{gende,jdbcType=INTEGER},
+      <if test="gender != null" >
+        gender = #{gender,jdbcType=INTEGER},
       </if>
       <if test="province != null" >
         province = #{province,jdbcType=VARCHAR},
@@ -93,8 +94,8 @@
       <if test="menchantId != null" >
         and menchant_id = #{menchantId,jdbcType=VARCHAR}
       </if>
-      <if test="gende != null" >
-        and gende = #{gende,jdbcType=INTEGER}
+      <if test="gender != null" >
+        and gender = #{gender,jdbcType=INTEGER}
       </if>
       <if test="province != null" >
         and province = #{province,jdbcType=VARCHAR}
@@ -129,8 +130,8 @@
       <if test="menchantId != null" >
         and menchant_id = #{menchantId,jdbcType=VARCHAR}
       </if>
-      <if test="gende != null" >
-        and gende = #{gende,jdbcType=INTEGER}
+      <if test="gender != null" >
+        and gender = #{gender,jdbcType=INTEGER}
       </if>
       <if test="province != null" >
         and province = #{province,jdbcType=VARCHAR}

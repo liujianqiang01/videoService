@@ -4,9 +4,9 @@ public class Configure {
 	private static String key = "你的商户的api秘钥";
 
 	//小程序ID	
-	private static String appID = "wx1a23166416918cfc";
+	private static String appID = "wxcf3963ceb7795bb2";
 	//商户号
-	private static String mch_id = "你的商户号";
+	private static String mch_id = "1519800311";
 	//
 	private static String secret = "58fccf49ae558a7e58cd3c240c9e7d73";
 

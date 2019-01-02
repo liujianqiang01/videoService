@@ -1,6 +1,8 @@
 package com.video.dao;
 
 import com.video.model.TVipCodes;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 
 public interface ITVipCodesMapper {
@@ -34,5 +36,5 @@ public interface ITVipCodesMapper {
     */
     TVipCodes selectByWhere(TVipCodes record);
 
-    TVipCodes selectOneByWhere(Integer vipType,Integer state,int limit);
+    TVipCodes selectOneByWhere(@Param("vipType") Integer vipType, @Param("vipState")Integer vipState, @Param("limit")int limit);
 }

@@ -2,20 +2,20 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.video.dao.ITOrderMapper" >
   <sql id="Base_Column_List" >
-    id, order_code, order_state, order_price, merchant_id, open_id, vip_code, vip_state, 
-    vip_start_time, vip_end_time, third_oeder_code
+    id,order_code as orderCode, order_state as orderState, order_price as orderPrice, merchant_id as merchantId,
+    open_id as openId, vip_code as vipCode, vip_state as vipState,
+    vip_start_time as vipStartTime, vip_end_time as vipEndTime, third_oeder_code as thirdOederCode
   </sql>
   
 	<!--批量添加-->
   <insert id="insertBatch" parameterType="java.util.List" >
-    insert into t_order (id, 
+    insert into t_order (
       order_code, order_state, order_price, merchant_id, 
       open_id, vip_code, vip_state, vip_start_time, vip_end_time, 
       third_oeder_code)
     values
 		<foreach collection="list" item="item" separator=",">
 			(
-			#{item.id}, 
       #{item.orderCode}, #{item.orderState}, #{item.orderPrice}, #{item.merchantId}, 
       #{item.openId}, #{item.vipCode}, #{item.vipState}, #{item.vipStartTime}, #{item.vipEndTime}, 
       #{item.thirdOederCode})

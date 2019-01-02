@@ -45,7 +45,7 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     ITVipCodesMapper vipCodesMapper;
 
-    private static int count =1;
+    private static int count =0;
 
     @Override
     public ApiResponse subOrder(String spbill_create_ip, Integer vipType ) {
@@ -84,7 +84,10 @@ public class OrderServiceImpl implements OrderService {
             //生成签名
             String sign = Signature.getSign(order);
             order.setSign(sign);
-            addOrder(order,token, vipPrice);
+            int suss = addOrder(order,token, vipPrice);
+            if(suss == 0){
+                return ApiResponse.fail(ApiEnum.RETURN_ERROR);
+            }
             String result = HttpRequest.sendPost("https://api.mch.weixin.qq.com/pay/unifiedorder", order);
             log.info("---------下单返回:" + result);
             XStream xStream = new XStream();
@@ -106,7 +109,7 @@ public class OrderServiceImpl implements OrderService {
      * @param orderInfo
      * @param token
      */
-    private void addOrder(OrderInfo orderInfo, TokenBean token,TVipPrice vipPrice){
+    private int addOrder(OrderInfo orderInfo, TokenBean token,TVipPrice vipPrice){
         TOrder order = new TOrder();
         BeanUtils.copyProperties(orderInfo,order);
         order.setMerchantId(token.getMerchantId());
@@ -115,9 +118,13 @@ public class OrderServiceImpl implements OrderService {
         order.setOrderPrice(orderInfo.getTotal_fee());
         order.setOpenId(orderInfo.getOpenid());
         getVip(order,vipPrice);
-        List<TOrder> orders = new ArrayList<>();
-        orders.add(order);
-        orderMapper.insertBatch(orders);
+        if(!StringUtils.isEmpty(order.getVipCode())) {
+            List<TOrder> orders = new ArrayList<>();
+            orders.add(order);
+            orderMapper.insertBatch(orders);
+            return 1;
+        }
+        return 0;
     }
 
     /**
@@ -144,7 +151,7 @@ public class OrderServiceImpl implements OrderService {
     private synchronized int getCount(){
         count +=1;
         int next = count;
-        if(count > 100){//大于100归0
+        if(count > 10){//大于100归0
             count = 0;
         }
         return next;

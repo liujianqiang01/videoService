@@ -86,7 +86,7 @@ public class LoginController {
 		tokenBean.setSession_key(jsonObject.getString("session_key"));
 		tokenBean.setToken(token);
 		tokenBean.setMerchantId(request.getParameter("merchantId"));
-		tokenBean.setUserType(request.getParameter("userType"));
+		tokenBean.setUserType(Integer.valueOf(request.getParameter("userType")));
 		log.info("生成tokenBean", tokenBean);
 		TokenUtil.setHeader(tokenBean);
 		//放入session中

@@ -16,7 +16,7 @@ public class TokenBean {
     //商户Id
     private String merchantId;
     //用户类型
-    private String userType;
+    private Integer userType;
     //昵称
     private String nickName;
     // 性别 0：未知、1：男、2：女
@@ -53,11 +53,11 @@ public class TokenBean {
         this.merchantId = merchantId;
     }
 
-    public String getUserType() {
+    public Integer getUserType() {
         return userType;
     }
 
-    public void setUserType(String userType) {
+    public void setUserType(Integer userType) {
         this.userType = userType;
     }
 

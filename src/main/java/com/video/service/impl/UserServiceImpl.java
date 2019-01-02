@@ -31,9 +31,10 @@ public class UserServiceImpl implements UserService {
         TUser user = new TUser();
         user.setOpenId(tokenBean.getOpenId());
         user.setMenchantId(tokenBean.getMerchantId());
-        TUser result = userMapper.selectByWhere(user);
-        BeanUtils.copyProperties(tokenBean,user);
-        if(result == null){//新增
+        user.setUserType(tokenBean.getUserType());
+        List<TUser> result = userMapper.selectListByWhere(user);
+        if(result == null || result.size() <=0){//新增
+            BeanUtils.copyProperties(tokenBean,user);
             List<TUser> paramList = new ArrayList<>();
             paramList.add(user);
             userMapper.insertBatch(paramList);
