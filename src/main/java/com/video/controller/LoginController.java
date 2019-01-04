@@ -7,7 +7,7 @@ import com.video.common.Configure;
 import com.video.model.Ao.HeaderInfo;
 import com.video.model.TUser;
 import com.video.service.UserService;
-import com.video.util.ApiEnum;
+import com.video.enumUtil.ApiEnum;
 import com.video.util.ApiResponse;
 import com.video.util.TokenBean;
 import com.video.util.TokenUtil;
@@ -49,6 +49,7 @@ public class LoginController {
 		HttpResponse res = httpClient.execute(httpGet);
 		HttpEntity entity = res.getEntity();
 		String result = EntityUtils.toString(entity, "UTF-8");
+		log.error("微信获取openId= "+result);
 		if(StringUtils.isEmpty(result)){
 			log.error("微信登陆未获取到openId！");
 			return  ApiResponse.fail(ApiEnum.PARAM_NULL);

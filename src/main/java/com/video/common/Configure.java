@@ -1,14 +1,16 @@
 package com.video.common;
 
 public class Configure {
-	private static String key = "你的商户的api秘钥";
+	private static String key = "TgyJpbqnUn45aLizzgdAJsaMyyRiHqfH";
 
 	//小程序ID	
-	private static String appID = "wxcf3963ceb7795bb2";
+	private static String appID = "wx4ff803a9d7c7f8ff";
 	//商户号
 	private static String mch_id = "1519800311";
 	//
-	private static String secret = "58fccf49ae558a7e58cd3c240c9e7d73";
+	private static String secret = "d48f8005f7ab92421b8ee9b8604dbc75";
+
+	private static String spbill_create_ip = "192.168.1.100";
 
 	public static String getSecret() {
 		return secret;
@@ -42,4 +44,11 @@ public class Configure {
 		Configure.mch_id = mch_id;
 	}
 
+	public static String getSpbill_create_ip() {
+		return spbill_create_ip;
+	}
+
+	public static void setSpbill_create_ip(String spbill_create_ip) {
+		Configure.spbill_create_ip = spbill_create_ip;
+	}
 }

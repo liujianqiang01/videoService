@@ -1,4 +1,4 @@
-package com.video.util;
+package com.video.enumUtil;
 
 /**
  * @Author: liujianqiang

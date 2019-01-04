@@ -2,9 +2,12 @@ package com.video.controller;
 
 
 import com.alibaba.druid.util.StringUtils;
+import com.video.model.TOrder;
 import com.video.service.OrderService;
-import com.video.util.ApiEnum;
+import com.video.enumUtil.ApiEnum;
 import com.video.util.ApiResponse;
+import com.video.util.TokenBean;
+import com.video.util.TokenUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * 统一下单接口
@@ -26,15 +30,11 @@ public class OrderController {
 	@PostMapping("/subOrder")
 	@ResponseBody
 	public ApiResponse subOrder(HttpServletRequest requset){
-		String spbill_create_ip = requset.getParameter("spbill_create_ip");
 		String vipType = requset.getParameter("vipType");
-		if(StringUtils.isEmpty(spbill_create_ip)){
-			return ApiResponse.fail(ApiEnum.PARAM_NULL);
-		}
 		if(StringUtils.isEmpty(vipType)){
 			return ApiResponse.fail(ApiEnum.PARAM_NULL);
 		}
-		return orderService.subOrder(spbill_create_ip,Integer.valueOf(vipType));
+		return orderService.subOrder(Integer.valueOf(vipType));
 	}
 
 	@PostMapping("/getFree")
@@ -42,5 +42,12 @@ public class OrderController {
 	public Object free(HttpServletRequest requset){
 
 		return "adfasdf";
+	}
+
+	public ApiResponse getOrder(){
+		TokenBean token = TokenUtil.getToken();
+
+		List<TOrder> order = orderService.getOrder(token.getOpenId(),token.getUserType());
+		return ApiResponse.success(order);
 	}
 }

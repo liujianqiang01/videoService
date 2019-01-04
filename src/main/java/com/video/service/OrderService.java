@@ -1,7 +1,10 @@
 package com.video.service;
 
-import com.video.model.Ao.OrderInfo;
+import com.video.model.Ao.PayResultInfo;
+import com.video.model.TOrder;
 import com.video.util.ApiResponse;
+
+import java.util.List;
 
 /**
  * @Author: liujianqiang
@@ -9,5 +12,8 @@ import com.video.util.ApiResponse;
  * @Description:
  */
 public interface OrderService {
-    ApiResponse subOrder(String spbill_create_ip, Integer vipType);
+    ApiResponse subOrder(Integer vipType);
+    List<TOrder> getOrder(String openId, Integer userType);
+    void successOrder(PayResultInfo order);
+    void unSuccessOrder(PayResultInfo order);
 }
