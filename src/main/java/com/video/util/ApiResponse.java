@@ -37,13 +37,11 @@ public class ApiResponse <D> implements Serializable {
         this.data = data;
         this.errMsg = errMsg;
     }
-
     private static <D> ApiResponse newInstance(int errCode, D data, String errMsg) {
         ApiResponse apiResponse = new ApiResponse<>(errCode, data, errMsg);
         log.info("返回数据:{}", JSON.toJSONString(apiResponse));
         return apiResponse;
     }
-
     private static <E extends Enum<E>, D> ApiResponse<D> fail(D data, E error) {
 
         int code = ApiEnum.SYSTEM_ERROR.getErrCode();

@@ -56,4 +56,11 @@ public class UserServiceImpl implements UserService {
             userMapper.updateByPrimaryKeySelective(update);
         }
     }
+
+    @Override
+    public TUser getTuser(String openId) {
+        TUser user = new TUser();
+        user.setOpenId(openId);
+        return  userMapper.selectByWhere(user);
+    }
 }

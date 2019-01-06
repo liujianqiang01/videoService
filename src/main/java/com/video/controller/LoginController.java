@@ -86,8 +86,16 @@ public class LoginController {
 		tokenBean.setOpenId(jsonObject.getString("openid"));
 		tokenBean.setSession_key(jsonObject.getString("session_key"));
 		tokenBean.setToken(token);
-		tokenBean.setMerchantId(request.getParameter("merchantId"));
-		tokenBean.setUserType(Integer.valueOf(request.getParameter("userType")));
+		String merchantId = request.getParameter("merchantId");
+		Integer userType = Integer.valueOf(request.getParameter("userType"));
+		//用户第一次绑定商户，那么永久属于第一次绑定的商户
+		TUser tuser = userService.getTuser(tokenBean.getOpenId());
+		if(tuser != null){
+			merchantId = tuser.getMenchantId();
+			userType = tuser.getUserType();
+		}
+		tokenBean.setMerchantId(merchantId);
+		tokenBean.setUserType(userType);
 		log.info("生成tokenBean", tokenBean);
 		TokenUtil.setHeader(tokenBean);
 		//放入session中

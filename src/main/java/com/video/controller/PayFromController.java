@@ -18,7 +18,6 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Controller
 public class PayFromController {
-	private static final long serialVersionUID = 1L;
 	private static Logger log = LoggerFactory.getLogger(LoginController.class);
 
 	@PostMapping("/getPayForm")

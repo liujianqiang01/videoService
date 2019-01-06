@@ -1,6 +1,7 @@
 package com.video.service;
 
 
+import com.video.model.TUser;
 import com.video.util.TokenBean;
 
 /**
@@ -12,5 +13,6 @@ public interface UserService {
 
     void addUserInfo(TokenBean tokenBean);
     void updateUserInfo(TokenBean tokenBean);
+    TUser getTuser(String openId);
 
 }

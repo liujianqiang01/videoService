@@ -1,12 +1,9 @@
 package com.video.controller;
 
-import com.sun.tools.corba.se.idl.constExpr.Or;
 import com.thoughtworks.xstream.XStream;
 import com.video.common.StreamUtil;
-import com.video.dao.ITOrderMapper;
 import com.video.model.Ao.OrderSync;
 import com.video.model.Ao.PayResultInfo;
-import com.video.model.TOrder;
 import com.video.service.OrderService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,16 +19,19 @@ import java.io.IOException;
  * 接收支付结果
  */
 @Controller
+@RequestMapping("/payNotify")
 public class PayResultController {
-	private static final long serialVersionUID = 1L;
 	private static Logger log = LoggerFactory.getLogger(LoginController.class);
 	@Autowired
 	OrderService orderService;
 	@RequestMapping("/payResult")
 	@ResponseBody
 	public Object payResult(HttpServletRequest requset) throws  IOException{
+		log.info("-------支付回调:");
+
 		String result = StreamUtil.read(requset.getInputStream());
 		XStream xStream = new XStream();
+		log.info("-------支付回掉结果:"+xStream);
 		xStream.alias("xml", PayResultInfo.class);
 		PayResultInfo returnInfo = (PayResultInfo) xStream.fromXML(result);
 		log.info("-------支付结果:"+result);

@@ -2,6 +2,7 @@ package com.video.dao;
 
 import com.video.model.TOrder;
 
+import java.util.Date;
 import java.util.List;
 
 public interface ITOrderMapper {
@@ -34,4 +35,10 @@ public interface ITOrderMapper {
     *条件查询
     */
     TOrder selectByWhere(TOrder record);
+
+    /**
+     * 查询超时订单
+     * @return
+     */
+    List<TOrder> getTimeOutOrder(Date date);
 }

@@ -16,6 +16,8 @@ public class TVipPrice implements Serializable {
      //有效期 /天
     private Integer indate;
 
+    private String vipName;
+
     private static final long serialVersionUID = 1L;
 
     public Integer getId() {
@@ -48,6 +50,14 @@ public class TVipPrice implements Serializable {
 
     public void setIndate(Integer indate) {
         this.indate = indate;
+    }
+
+    public String getVipName() {
+        return vipName;
+    }
+
+    public void setVipName(String vipName) {
+        this.vipName = vipName;
     }
 
     @Override

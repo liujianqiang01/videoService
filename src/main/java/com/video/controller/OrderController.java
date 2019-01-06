@@ -8,6 +8,7 @@ import com.video.enumUtil.ApiEnum;
 import com.video.util.ApiResponse;
 import com.video.util.TokenBean;
 import com.video.util.TokenUtil;
+import org.apache.http.client.utils.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,18 +37,21 @@ public class OrderController {
 		}
 		return orderService.subOrder(Integer.valueOf(vipType));
 	}
-
-	@PostMapping("/getFree")
+	@PostMapping("/getOrder")
 	@ResponseBody
-	public Object free(HttpServletRequest requset){
-
-		return "adfasdf";
-	}
-
 	public ApiResponse getOrder(){
 		TokenBean token = TokenUtil.getToken();
 
 		List<TOrder> order = orderService.getOrder(token.getOpenId(),token.getUserType());
+		for(TOrder o : order){
+			o.setVipStartDate(DateUtils.formatDate(o.getVipStartTime(),"yyyy-MM-dd"));
+			o.setVipEndDate(DateUtils.formatDate(o.getVipEndTime(),"yyyy-MM-dd"));
+			//未支付成功的订单不展示vip编码
+			if(o.getVipState() == 0){
+				o.setVipCode(null);
+			}
+		}
 		return ApiResponse.success(order);
 	}
+
 }

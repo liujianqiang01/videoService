@@ -30,6 +30,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -85,7 +86,8 @@ public class OrderServiceImpl implements OrderService {
             order.setOut_trade_no(RandomStringGenerator.getRandomStringByLength(32));
             order.setTotal_fee(vipPrice.getVipPrice().multiply(BigDecimal.valueOf(100)).setScale(0));
             order.setSpbill_create_ip(Configure.getSpbill_create_ip());
-            order.setNotify_url("https://www.filmunion.com.cn/payResult");
+           // order.setNotify_url("https://www.filmunion.com.cn/video/payNotify/payResult");
+            order.setNotify_url("http://192.168.1.102/payNotify/payResult");
             order.setTrade_type("JSAPI");
             order.setOpenid(openid);
             order.setSign_type("MD5");
@@ -104,6 +106,7 @@ public class OrderServiceImpl implements OrderService {
 
             if("SUCCESS".equals(returnInfo.getReturn_code()) && "SUCCESS".equals(returnInfo.getResult_code())){
                 json.put("prepayId", returnInfo.getPrepay_id());
+                updateOrder(order.getOut_trade_no(),returnInfo.getPrepay_id());
             }else {
                 log.error(returnInfo.getReturn_msg());
                 return ApiResponse.fail(ApiEnum.PARAM_ERROR);
@@ -155,13 +158,24 @@ public class OrderServiceImpl implements OrderService {
         if(orderResult != null) {
             TOrder update = new TOrder();
             update.setId(orderResult.getId());
-            update.setThirdOederCode(order.getOut_trade_no());
             if (order.getTrade_state().equals(TradeState.CLOSED.getCode()) || order.getTrade_state().equals(TradeState.PAYERROR.getCode())
                     || order.getTrade_state().equals(TradeState.REVOKED.getCode())) {
-                update.setOrderState(3);
+                update.setOrderState(4);
             }else if(order.getTrade_state().equals(TradeState.NOTPAY.getCode())||order.getTrade_state().equals(TradeState.USERPAYING.getCode())){
-                update.setOrderState(1);
+                update.setOrderState(2);
             }
+            orderMapper.updateByPrimaryKeySelective(update);
+        }
+    }
+
+    public void updateOrder(String orderCode,String prepayId){
+        TOrder param = new TOrder();
+        param.setOrderCode(orderCode);
+        TOrder orderResult = orderMapper.selectByWhere(param);
+        if(orderResult != null) {
+            TOrder update = new TOrder();
+            update.setId(orderResult.getId());
+            update.setPrepayId(prepayId);
             orderMapper.updateByPrimaryKeySelective(update);
         }
     }
@@ -176,7 +190,7 @@ public class OrderServiceImpl implements OrderService {
         BeanUtils.copyProperties(orderInfo,order);
         order.setMerchantId(token.getMerchantId());
         order.setOrderCode(orderInfo.getOut_trade_no());
-        order.setOrderState(0);
+        order.setOrderState(1);
         order.setOrderPrice(orderInfo.getTotal_fee());
         order.setOpenId(orderInfo.getOpenid());
         getVip(order,vipPrice);
@@ -219,5 +233,33 @@ public class OrderServiceImpl implements OrderService {
             count = 0;
         }
         return next;
+    }
+
+    @Override
+    @Transactional
+    public void unPayTask() {
+        long time = System.currentTimeMillis();
+        Date date = new Date(time - 3600000);List<TOrder> timeOutOrder = orderMapper.getTimeOutOrder(date);
+        TOrder param;
+        TVipCodes update;
+        for(TOrder o : timeOutOrder){
+            log.info("订单超时取消 orderCode = "+o.getOrderCode());
+            param = new TOrder();
+            param.setId(o.getId());
+            param.setVipState(4);
+            param.setVipState(0);
+            //订单设置成支付失败
+            orderMapper.updateByPrimaryKeySelective(param);
+            //cipCode修改成有效
+            TVipCodes codeParam = new TVipCodes();
+            codeParam.setVipCode(o.getVipCode());
+            TVipCodes codes = vipCodesMapper.selectByWhere(codeParam);
+            if(codes !=null){
+                update = new TVipCodes();
+                update.setId(codes.getId());
+                update.setVipState(1);
+                vipCodesMapper.updateByPrimaryKeySelective(update);
+            }
+        }
     }
 }

@@ -37,6 +37,14 @@ public class TOrder implements Serializable {
 
      //三方订单
     private String thirdOederCode;
+    //vip开始时间
+    private String vipStartDate;
+
+    //vip结束时间
+    private String vipEndDate;
+
+    //第三方预支付id
+    private String prepayId;
 
     private static final long serialVersionUID = 1L;
 
@@ -126,6 +134,30 @@ public class TOrder implements Serializable {
 
     public void setThirdOederCode(String thirdOederCode) {
         this.thirdOederCode = thirdOederCode == null ? null : thirdOederCode.trim();
+    }
+
+    public String getVipStartDate() {
+        return vipStartDate;
+    }
+
+    public void setVipStartDate(String vipStartDate) {
+        this.vipStartDate = vipStartDate;
+    }
+
+    public String getPrepayId() {
+        return prepayId;
+    }
+
+    public void setPrepayId(String prepayId) {
+        this.prepayId = prepayId;
+    }
+
+    public String getVipEndDate() {
+        return vipEndDate;
+    }
+
+    public void setVipEndDate(String vipEndDate) {
+        this.vipEndDate = vipEndDate;
     }
 
     @Override

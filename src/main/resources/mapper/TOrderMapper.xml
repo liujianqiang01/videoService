@@ -4,7 +4,7 @@
   <sql id="Base_Column_List" >
     id,order_code as orderCode, order_state as orderState, order_price as orderPrice, merchant_id as merchantId,
     open_id as openId, vip_code as vipCode, vip_state as vipState,
-    vip_start_time as vipStartTime, vip_end_time as vipEndTime, third_oeder_code as thirdOederCode
+    vip_start_time as vipStartTime, vip_end_time as vipEndTime, third_oeder_code as thirdOederCode,prepay_id as prepayId
   </sql>
   
 	<!--批量添加-->
@@ -69,6 +69,9 @@
       </if>
       <if test="thirdOederCode != null" >
         third_oeder_code = #{thirdOederCode,jdbcType=VARCHAR},
+      </if>
+      <if test="prepayId != null" >
+        prepay_id = #{prepayId,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
@@ -150,5 +153,13 @@
         and third_oeder_code = #{thirdOederCode,jdbcType=VARCHAR}
       </if>
     </where>
+  </select>
+
+  <!--根据主键Id查询-->
+  <select id="getTimeOutOrder" resultType="com.video.model.TOrder" parameterType="java.util.Date" >
+    select
+    <include refid="Base_Column_List" />
+    from t_order
+    where vip_start_time  &lt; #{date} and order_state = 1
   </select>
 </mapper>
