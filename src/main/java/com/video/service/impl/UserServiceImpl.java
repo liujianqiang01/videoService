@@ -22,7 +22,9 @@ public class UserServiceImpl implements UserService {
     ITUserMapper userMapper;
 
     /**
-     * 无论商户还是普通用户，第一次进入先绑定商家和微信号的关系
+     * 无论商户还是普通用户，第一次进入先绑定微信号的关系
+     * 一个商户号不允许绑定多个商户
+     * 普通用户不允许绑定多个商户，并且只能绑定第一次扫码进入的商户
      * 以后每次进入修改用户昵称
      * @param tokenBean
      */
@@ -34,6 +36,15 @@ public class UserServiceImpl implements UserService {
         user.setUserType(tokenBean.getUserType());
         List<TUser> result = userMapper.selectListByWhere(user);
         if(result == null || result.size() <=0){//新增
+            if(user.getUserType() == 1){//判断商户号是否绑定
+                TUser merchant = new TUser();
+                merchant.setMenchantId(tokenBean.getMerchantId());
+                merchant.setUserType(tokenBean.getUserType());
+                List<TUser> merchantList = userMapper.selectListByWhere(merchant);
+                if(merchantList != null && merchantList.size() >0){
+                    return;
+                }
+            }
             BeanUtils.copyProperties(tokenBean,user);
             List<TUser> paramList = new ArrayList<>();
             paramList.add(user);
@@ -58,9 +69,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public TUser getTuser(String openId) {
+    public  List<TUser> getTuser(String openId) {
         TUser user = new TUser();
         user.setOpenId(openId);
-        return  userMapper.selectByWhere(user);
+        return  userMapper.selectListByWhere(user);
     }
 }

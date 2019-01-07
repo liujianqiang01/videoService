@@ -87,8 +87,7 @@ public class OrderServiceImpl implements OrderService {
             order.setOut_trade_no(RandomStringGenerator.getRandomStringByLength(20));
             order.setTotal_fee(vipPrice.getVipPrice().multiply(BigDecimal.valueOf(100)).setScale(0));
             order.setSpbill_create_ip(Configure.getSpbill_create_ip());
-            // order.setNotify_url("https://www.filmunion.com.cn/video/payNotify/payResult");
-            order.setNotify_url("https://47.104.96.127/video/payNotify/payResult");
+            order.setNotify_url("https://www.filmunion.com.cn/video/payNotify/payResult");
             order.setTrade_type("JSAPI");
             order.setOpenid(openid);
             order.setSign_type("MD5");

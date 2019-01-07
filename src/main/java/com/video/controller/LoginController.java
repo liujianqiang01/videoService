@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.UUID;
 
 
@@ -54,15 +55,17 @@ public class LoginController {
 			log.error("微信登陆未获取到openId！");
 			return  ApiResponse.fail(ApiEnum.OPENID_NULL);
 		}
-		String token = createToken(request,result);
-		if(StringUtils.isEmpty(token)){
+		TokenBean token = createToken(request,result);
+		if(StringUtils.isEmpty(token.getToken())){
 			log.error("未获取到token");
 			return ApiResponse.fail(ApiEnum.TOKEN_ERROR);
 		}
 		String sessionId = request.getSession().getId();
 		HeaderInfo headerInfo = new HeaderInfo();
 		headerInfo.setSessionId(sessionId);
-		headerInfo.setToken(token);
+		headerInfo.setToken(token.getToken());
+		headerInfo.setMerchantId(token.getMerchantId());
+		headerInfo.setUserType(token.getUserType());
 		return  ApiResponse.success(headerInfo);
 	}
 
@@ -72,7 +75,7 @@ public class LoginController {
 	 * @return
 	 * @throws Exception
 	 */
-	public String createToken(HttpServletRequest request,String result){
+	public TokenBean createToken(HttpServletRequest request,String result){
 
 		//生成token
 		String token = UUID.randomUUID().toString().substring(0, 16);
@@ -87,12 +90,32 @@ public class LoginController {
 		tokenBean.setSession_key(jsonObject.getString("session_key"));
 		tokenBean.setToken(token);
 		String merchantId = request.getParameter("merchantId");
-		Integer userType = Integer.valueOf(request.getParameter("userType"));
+		String userTypeStr = request.getParameter("userType");
+		Integer userType ;
+		if(StringUtils.isEmpty(userTypeStr)){
+			userType = null;
+		}else {
+			userType = Integer.valueOf(userTypeStr);
+		}
 		//用户第一次绑定商户，那么永久属于第一次绑定的商户
-		TUser tuser = userService.getTuser(tokenBean.getOpenId());
-		if(tuser != null){
-			merchantId = tuser.getMenchantId();
-			userType = tuser.getUserType();
+		List<TUser> tuser = userService.getTuser(tokenBean.getOpenId());
+		if(tuser != null && tuser.size()>0){
+			if(tuser.size() == 1) {
+				merchantId = tuser.get(0).getMenchantId();
+				userType = tuser.get(0).getUserType();
+			}
+			//如果有多个那么默认返回商户
+			for(TUser user : tuser){
+				if(user.getUserType() == 1){
+					merchantId = user.getMenchantId();
+					userType = user.getUserType();
+				}
+			}
+		}
+		//如果未查到用户绑定信息，那么就用平台的信息
+		if(StringUtils.isEmpty(merchantId) || userType == null){
+			merchantId = "Admin";
+			userType = 0;
 		}
 		tokenBean.setMerchantId(merchantId);
 		tokenBean.setUserType(userType);
@@ -101,7 +124,7 @@ public class LoginController {
 		//放入session中
 		request.getSession().setAttribute(token, tokenBean);
 		userService.addUserInfo(tokenBean);
-		return token;
+		return tokenBean;
 	}
 
 	@PostMapping("/login")
