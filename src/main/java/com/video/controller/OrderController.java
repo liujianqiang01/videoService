@@ -2,6 +2,8 @@ package com.video.controller;
 
 
 import com.alibaba.druid.util.StringUtils;
+import com.github.pagehelper.PageInfo;
+import com.video.enumUtil.EnumUtil;
 import com.video.model.TOrder;
 import com.video.service.OrderService;
 import com.video.enumUtil.ApiEnum;
@@ -17,7 +19,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 /**
  * 统一下单接口
@@ -39,19 +40,44 @@ public class OrderController {
 	}
 	@PostMapping("/getOrder")
 	@ResponseBody
-	public ApiResponse getOrder(){
+	public ApiResponse getOrder(HttpServletRequest requset){
 		TokenBean token = TokenUtil.getToken();
-
-		List<TOrder> order = orderService.getOrder(token.getOpenId(),token.getUserType());
-		for(TOrder o : order){
+		if(token == null){
+			return ApiResponse.fail(ApiEnum.TOKEN_ERROR);
+		}
+		String pageNum = requset.getParameter("pageNum");
+		String pageSize =  requset.getParameter("pageSize");
+		if(StringUtils.isEmpty(pageNum)){
+			pageNum = "1";
+		}
+		if(StringUtils.isEmpty(pageSize)){
+			pageSize = "5";
+		}
+		PageInfo<TOrder> order = orderService.getOrder(token.getOpenId(),token.getUserType(),Integer.valueOf(pageNum),Integer.valueOf(pageSize));
+		for(TOrder o : order.getList()){
 			o.setVipStartDate(DateUtils.formatDate(o.getVipStartTime(),"yyyy-MM-dd"));
 			o.setVipEndDate(DateUtils.formatDate(o.getVipEndTime(),"yyyy-MM-dd"));
 			//未支付成功的订单不展示vip编码
-			if(o.getVipState() == 0){
-				o.setVipCode(null);
+			if(o.getOrderState() == 1){
+				o.setVipCode("");
 			}
 		}
 		return ApiResponse.success(order);
 	}
 
+	@PostMapping("/getEarnings")
+	@ResponseBody
+	public ApiResponse getEarnings(){
+		TokenBean token = TokenUtil.getToken();
+		if(token == null){
+			return ApiResponse.fail(ApiEnum.TOKEN_ERROR);
+		}
+		if(token.getUserType().equals(EnumUtil.COMMION_USER_TYPE.getCode())){
+			return ApiResponse.fail(ApiEnum.NOT_MERCHANT);
+		}
+		if(StringUtils.isEmpty(token.getMerchantId())){
+			return ApiResponse.fail(ApiEnum.PARAM_ERROR);
+		}
+		return ApiResponse.success(orderService.getEarnings(token));
+	}
 }

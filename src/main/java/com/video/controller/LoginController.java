@@ -52,12 +52,12 @@ public class LoginController {
 		log.error("微信获取openId= "+result);
 		if(StringUtils.isEmpty(result)){
 			log.error("微信登陆未获取到openId！");
-			return  ApiResponse.fail(ApiEnum.PARAM_NULL);
+			return  ApiResponse.fail(ApiEnum.OPENID_NULL);
 		}
 		String token = createToken(request,result);
 		if(StringUtils.isEmpty(token)){
 			log.error("未获取到token");
-			return ApiResponse.fail(ApiEnum.PARAM_NULL);
+			return ApiResponse.fail(ApiEnum.TOKEN_ERROR);
 		}
 		String sessionId = request.getSession().getId();
 		HeaderInfo headerInfo = new HeaderInfo();
@@ -110,7 +110,7 @@ public class LoginController {
 		String token = request.getHeader("token");
 		TokenBean tokenBean = (TokenBean) request.getSession().getAttribute(token);
 		if(userInfo == null){
-			return ApiResponse.fail(ApiEnum.PARAM_NULL);
+			return ApiResponse.fail(ApiEnum.TOKEN_ERROR);
 		}
 		tokenBean.setNickName(userInfo.getNickName());
 		tokenBean.setGender(userInfo.getGender());

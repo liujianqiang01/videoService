@@ -1,10 +1,12 @@
 package com.video.service;
 
+import com.github.pagehelper.PageInfo;
 import com.video.model.Ao.PayResultInfo;
 import com.video.model.TOrder;
 import com.video.util.ApiResponse;
+import com.video.util.TokenBean;
 
-import java.util.List;
+import java.math.BigDecimal;
 
 /**
  * @Author: liujianqiang
@@ -25,13 +27,13 @@ public interface OrderService {
      * @param userType
      * @return
      */
-    List<TOrder> getOrder(String openId, Integer userType);
+    PageInfo<TOrder> getOrder(String openId, Integer userType,int pageNum,int pageSize);
 
     /**
      * 支付成功
      * @param order
      */
-    void successOrder(PayResultInfo order);
+    boolean successOrder(PayResultInfo order);
 
     /**
      * 支付失败
@@ -43,4 +45,15 @@ public interface OrderService {
      * 订单超时检查
      */
     void unPayTask();
+
+    /**
+     * 同步微信订单
+     */
+    void syncWeixinOrder();
+
+    /**
+     * 获取收益
+     * @return
+     */
+    BigDecimal getEarnings(TokenBean token);
 }

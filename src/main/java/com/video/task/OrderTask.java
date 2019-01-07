@@ -22,8 +22,19 @@ public class OrderTask {
      */
     @Scheduled(cron = "0 0/10 * * * ?")
     public void unPayTask(){
-        log.info("------未支付取消定时开始----");
+        log.info("------未支付取消定时开始---start-");
         orderService.unPayTask();
-        log.info("------未支付取消定时结束----");
+        log.info("------未支付取消定时结束---end-");
+    }
+
+    /**
+     * 同步微信订单
+     */
+    @Scheduled(cron = "0 0/2 * * * ?")
+    public void orderSync(){
+        log.info("------同步微信订单开始---start-");
+        orderService.syncWeixinOrder();
+        log.info("------同步微信订单结束---end-");
+
     }
 }

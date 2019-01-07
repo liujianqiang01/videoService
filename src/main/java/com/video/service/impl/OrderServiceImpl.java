@@ -2,6 +2,9 @@ package com.video.service.impl;
 
 import com.alibaba.druid.util.StringUtils;
 import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.PageException;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.thoughtworks.xstream.XStream;
 import com.video.common.Configure;
 import com.video.common.HttpRequest;
@@ -13,9 +16,7 @@ import com.video.dao.ITVipCodesMapper;
 import com.video.dao.ITVipPriceMapper;
 import com.video.enumUtil.EnumUtil;
 import com.video.enumUtil.TradeState;
-import com.video.model.Ao.OrderInfo;
-import com.video.model.Ao.OrderReturnInfo;
-import com.video.model.Ao.PayResultInfo;
+import com.video.model.Ao.*;
 import com.video.model.TOrder;
 import com.video.model.TUser;
 import com.video.model.TVipCodes;
@@ -53,50 +54,50 @@ public class OrderServiceImpl implements OrderService {
     ITVipCodesMapper vipCodesMapper;
     @Autowired
     ITUserMapper userMapper;
-    private static int count =0;
+    private static int count = 0;
 
     @Override
-    public ApiResponse subOrder( Integer vipType ) {
+    public ApiResponse subOrder(Integer vipType) {
         JSONObject json = new JSONObject();
         try {
             TokenBean token = TokenUtil.getToken();
-            if(token == null){
+            if (token == null) {
                 log.info("---------下单 token : " + token);
-                return ApiResponse.fail(ApiEnum.PARAM_NULL);
+                return ApiResponse.fail(ApiEnum.TOKEN_ERROR);
             }
 
             String openid = token.getOpenId();
-            if(StringUtils.isEmpty(openid)){
+            if (StringUtils.isEmpty(openid)) {
                 log.info("---------下单 openid : " + openid);
-                return ApiResponse.fail(ApiEnum.PARAM_NULL);
+                return ApiResponse.fail(ApiEnum.OPENID_NULL);
             }
             //获取vip价格
             TVipPrice vipPriceParam = new TVipPrice();
             vipPriceParam.setVipType(vipType);
             TVipPrice vipPrice = vipPriceMapper.selectByWhere(vipPriceParam);
-            if(vipPrice == null){
+            if (vipPrice == null) {
                 log.error("未能获取到对应的vip！");
-                return ApiResponse.fail(ApiEnum.PARAM_NULL);
+                return ApiResponse.fail(ApiEnum.VIP_NULL);
             }
             OrderInfo order = new OrderInfo();
             order.setAppid(Configure.getAppID());
             order.setMch_id(Configure.getMch_id());
             order.setNonce_str(RandomStringGenerator.getRandomStringByLength(32));
-            order.setBody("影视会员VIP年卡"+ vipPrice.getVipType());
-            order.setOut_trade_no(RandomStringGenerator.getRandomStringByLength(32));
+            order.setBody("影视会员VIP年卡" + vipPrice.getVipType());
+            order.setOut_trade_no(RandomStringGenerator.getRandomStringByLength(20));
             order.setTotal_fee(vipPrice.getVipPrice().multiply(BigDecimal.valueOf(100)).setScale(0));
             order.setSpbill_create_ip(Configure.getSpbill_create_ip());
-           // order.setNotify_url("https://www.filmunion.com.cn/video/payNotify/payResult");
-            order.setNotify_url("http://192.168.1.102/payNotify/payResult");
+            // order.setNotify_url("https://www.filmunion.com.cn/video/payNotify/payResult");
+            order.setNotify_url("https://47.104.96.127/video/payNotify/payResult");
             order.setTrade_type("JSAPI");
             order.setOpenid(openid);
             order.setSign_type("MD5");
             //生成签名
             String sign = Signature.getSign(order);
             order.setSign(sign);
-            int suss = addOrder(order,token, vipPrice);
-            if(suss == 0){
-                return ApiResponse.fail(ApiEnum.RETURN_ERROR);
+            int suss = addOrder(order, token, vipPrice);
+            if (suss == 0) {
+                return ApiResponse.fail(ApiEnum.VIP_NULL);
             }
             String result = HttpRequest.sendPost("https://api.mch.weixin.qq.com/pay/unifiedorder", order);
             log.info("---------下单返回:" + result);
@@ -104,12 +105,12 @@ public class OrderServiceImpl implements OrderService {
             xStream.alias("xml", OrderReturnInfo.class);
             OrderReturnInfo returnInfo = (OrderReturnInfo) xStream.fromXML(result);
 
-            if("SUCCESS".equals(returnInfo.getReturn_code()) && "SUCCESS".equals(returnInfo.getResult_code())){
+            if ("SUCCESS".equals(returnInfo.getReturn_code()) && "SUCCESS".equals(returnInfo.getResult_code())) {
                 json.put("prepayId", returnInfo.getPrepay_id());
-                updateOrder(order.getOut_trade_no(),returnInfo.getPrepay_id());
-            }else {
+                updateOrder(order.getOut_trade_no(), returnInfo.getPrepay_id());
+            } else {
                 log.error(returnInfo.getReturn_msg());
-                return ApiResponse.fail(ApiEnum.PARAM_ERROR);
+                return ApiResponse.fail(ApiEnum.SUB_ORDER_ERROR);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -119,60 +120,61 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<TOrder> getOrder(String openId, Integer userType) {
+    public  PageInfo<TOrder>  getOrder(String openId, Integer userType,int pageNum,int pageSize) {
         TOrder param = new TOrder();
-        if(userType.equals(EnumUtil.MERCHANT_USER_TYPE.getCode())){
+        if (userType.equals(EnumUtil.MERCHANT_USER_TYPE.getCode())) {
             TUser userParam = new TUser();
             userParam.setOpenId(openId);
             TUser userR = userMapper.selectByWhere(userParam);
-            if(userR != null) {
+            if (userR != null) {
                 param.setMerchantId(userR.getMenchantId());
-               return orderMapper.selectListByWhere(param);
+                PageInfo<TOrder> orderPageInfo = PageHelper.startPage(pageNum, pageSize).setOrderBy("id desc").doSelectPageInfo(() -> orderMapper.selectJojnListByWhere(param));
+                return orderPageInfo;
             }
             return null;
-        }else {
+        } else {
             param.setOpenId(openId);
-            return orderMapper.selectListByWhere(param);
+            PageInfo<TOrder> orderPageInfo = PageHelper.startPage(1, 1).setOrderBy("id desc").doSelectPageInfo(() -> orderMapper.selectJojnListByWhere(param));
+            return orderPageInfo;
         }
     }
 
     @Override
-    public void successOrder(PayResultInfo param) {
+    public boolean successOrder(PayResultInfo param) {
         TOrder order = new TOrder();
         order.setOrderCode(param.getOut_trade_no());
         TOrder orderResult = orderMapper.selectByWhere(order);
-
-        TOrder update = new TOrder();
-        update.setId(orderResult.getId());
-        update.setOrderState(2);
-        update.setVipState(1);
-        update.setThirdOederCode(param.getTransaction_id());
-        orderMapper.updateByPrimaryKeySelective(update);
+        if (orderResult != null && orderResult.getOrderState() <= 2) {
+            TOrder update = new TOrder();
+            update.setId(orderResult.getId());
+            update.setOrderState(3);
+            update.setVipState(1);
+            update.setThirdOederCode(param.getTransaction_id());
+            orderMapper.updateByPrimaryKeySelective(update);
+            return true;
+        }
+        return false;
     }
 
     @Override
     public void unSuccessOrder(PayResultInfo order) {
         TOrder param = new TOrder();
         param.setOrderCode(order.getOut_trade_no());
+        param.setOrderState(1);
         TOrder orderResult = orderMapper.selectByWhere(param);
-        if(orderResult != null) {
+        if (orderResult != null) {
             TOrder update = new TOrder();
             update.setId(orderResult.getId());
-            if (order.getTrade_state().equals(TradeState.CLOSED.getCode()) || order.getTrade_state().equals(TradeState.PAYERROR.getCode())
-                    || order.getTrade_state().equals(TradeState.REVOKED.getCode())) {
-                update.setOrderState(4);
-            }else if(order.getTrade_state().equals(TradeState.NOTPAY.getCode())||order.getTrade_state().equals(TradeState.USERPAYING.getCode())){
-                update.setOrderState(2);
-            }
+            update.setOrderState(2);
             orderMapper.updateByPrimaryKeySelective(update);
         }
     }
 
-    public void updateOrder(String orderCode,String prepayId){
+    public void updateOrder(String orderCode, String prepayId) {
         TOrder param = new TOrder();
         param.setOrderCode(orderCode);
         TOrder orderResult = orderMapper.selectByWhere(param);
-        if(orderResult != null) {
+        if (orderResult != null) {
             TOrder update = new TOrder();
             update.setId(orderResult.getId());
             update.setPrepayId(prepayId);
@@ -182,19 +184,20 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 订单入库
+     *
      * @param orderInfo
      * @param token
      */
-    private int addOrder(OrderInfo orderInfo, TokenBean token,TVipPrice vipPrice){
+    private int addOrder(OrderInfo orderInfo, TokenBean token, TVipPrice vipPrice) {
         TOrder order = new TOrder();
-        BeanUtils.copyProperties(orderInfo,order);
+        BeanUtils.copyProperties(orderInfo, order);
         order.setMerchantId(token.getMerchantId());
         order.setOrderCode(orderInfo.getOut_trade_no());
         order.setOrderState(1);
-        order.setOrderPrice(orderInfo.getTotal_fee());
+        order.setOrderPrice(orderInfo.getTotal_fee().divide(BigDecimal.valueOf(100)).setScale(2));
         order.setOpenId(orderInfo.getOpenid());
-        getVip(order,vipPrice);
-        if(!StringUtils.isEmpty(order.getVipCode())) {
+        getVip(order, vipPrice);
+        if (!StringUtils.isEmpty(order.getVipCode())) {
             List<TOrder> orders = new ArrayList<>();
             orders.add(order);
             orderMapper.insertBatch(orders);
@@ -206,30 +209,31 @@ public class OrderServiceImpl implements OrderService {
     /**
      * 获取vip
      */
-    private void getVip(TOrder order,TVipPrice vipPrice){
-        TVipCodes tVipCodes = vipCodesMapper.selectOneByWhere(vipPrice.getVipType(),1,getCount());
-        if(tVipCodes != null){
+    private void getVip(TOrder order, TVipPrice vipPrice) {
+        TVipCodes tVipCodes = vipCodesMapper.selectOneByWhere(vipPrice.getVipType(), 1, getCount());
+        if (tVipCodes != null) {
             order.setVipCode(tVipCodes.getVipCode());
             order.setVipState(0);
             order.setVipStartTime(new Date());
             long now = System.currentTimeMillis();
-            long to = (86400000*vipPrice.getIndate());
-            order.setVipEndTime(new Date(now+to));
+            long to = (86400000 * vipPrice.getIndate());
+            order.setVipEndTime(new Date(now + to));
             tVipCodes.setVipState(0);
             vipCodesMapper.updateByPrimaryKeySelective(tVipCodes);
-        }else{
+        } else {
             log.error("未获取到会员卡信息！");
         }
     }
 
     /**
      * 简单的防止并发
+     *
      * @return
      */
-    private synchronized int getCount(){
-        count +=1;
+    private synchronized int getCount() {
+        count += 1;
         int next = count;
-        if(count > 2){//大于100归0
+        if (count > 2) {//大于100归0
             count = 0;
         }
         return next;
@@ -239,27 +243,110 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     public void unPayTask() {
         long time = System.currentTimeMillis();
-        Date date = new Date(time - 3600000);List<TOrder> timeOutOrder = orderMapper.getTimeOutOrder(date);
+        Date date = new Date(time - 3600000);
+        List<TOrder> timeOutOrder = orderMapper.getTimeOutOrder(date);
         TOrder param;
         TVipCodes update;
-        for(TOrder o : timeOutOrder){
-            log.info("订单超时取消 orderCode = "+o.getOrderCode());
-            param = new TOrder();
-            param.setId(o.getId());
-            param.setVipState(4);
-            param.setVipState(0);
-            //订单设置成支付失败
-            orderMapper.updateByPrimaryKeySelective(param);
-            //cipCode修改成有效
-            TVipCodes codeParam = new TVipCodes();
-            codeParam.setVipCode(o.getVipCode());
-            TVipCodes codes = vipCodesMapper.selectByWhere(codeParam);
-            if(codes !=null){
-                update = new TVipCodes();
-                update.setId(codes.getId());
-                update.setVipState(1);
-                vipCodesMapper.updateByPrimaryKeySelective(update);
+        if (timeOutOrder != null) {
+            for (TOrder o : timeOutOrder) {
+                log.info("订单超时取消 orderCode = " + o.getOrderCode());
+                param = new TOrder();
+                param.setId(o.getId());
+                param.setOrderState(4);
+                param.setVipState(0);
+                //订单设置成支付失败
+                orderMapper.updateByPrimaryKeySelective(param);
+                //cipCode修改成有效
+                updateVipCodes(o.getVipCode());
             }
         }
     }
+
+    @Override
+    public void syncWeixinOrder() {
+        //获取所有订单为已经支付的
+        TOrder order = new TOrder();
+        order.setOrderState(2);
+        List<TOrder> orders = orderMapper.selectListByWhere(order);
+
+        OrderSync sync;
+        if (orders != null) {
+            for (TOrder o : orders) {
+                sync = new OrderSync();
+                sync.setAppid(Configure.getAppID());
+                sync.setMch_id(Configure.getMch_id());
+                sync.setNonce_str(RandomStringGenerator.getRandomStringByLength(32));
+                sync.setSign_type("MD5");
+                try {
+                    log.info("===>同步微信订单 order = " + o.toString());
+                    if (!StringUtils.isEmpty(o.getThirdOederCode())) {
+                        sync.setTransaction_id(o.getThirdOederCode());
+                    } else {
+                        sync.setOut_trade_no(o.getOrderCode());
+                    }
+                    //生成签名
+                    String sign = Signature.getSign(sync);
+                    sync.setSign(sign);
+                    String result = HttpRequest.sendPost("https://api.mch.weixin.qq.com/pay/orderquery", sync);
+                    log.info("---------订单返回:" + result);
+                    checkWeiXinOrder(result);
+                } catch (Exception e) {
+                    log.error("同步订单失败 orderCode = " + o.getOrderCode(), e);
+                }
+            }
+        }
+    }
+
+    /**
+     * 处理微信订单
+     */
+    @Transactional
+    public void checkWeiXinOrder(String result) {
+        XStream xStream = new XStream();
+        xStream.alias("xml", OrderQuery.class);
+        OrderQuery resultJson = (OrderQuery) xStream.fromXML(result);
+        if ("SUCCESS".equals(resultJson.getResult_code()) && "SUCCESS".equals(resultJson.getReturn_code())) {
+            TOrder param = new TOrder();
+            param.setOrderCode(resultJson.getOut_trade_no());
+            TOrder orders = orderMapper.selectByWhere(param);
+            if (orders != null && orders.getOrderState() != 4) {
+                TOrder update = new TOrder();
+                update.setId(orders.getId());
+                update.setThirdOederCode(resultJson.getTransaction_id());
+                //交易关闭
+                if (resultJson.getTrade_state().equals(TradeState.CLOSED.getCode()) || resultJson.getTrade_state().equals(TradeState.PAYERROR.getCode())
+                        || resultJson.getTrade_state().equals(TradeState.REVOKED.getCode())|| resultJson.getTrade_state().equals(TradeState.REFUND.getCode())) {
+                    update.setOrderState(4);
+                    update.setVipState(0);
+                    orderMapper.updateByPrimaryKeySelective(update);
+                    updateVipCodes(orders.getVipCode());
+                } else if (resultJson.getTrade_state().equals(TradeState.SUCCESS.getCode())) {
+                    update.setOrderState(3);
+                    orderMapper.updateByPrimaryKeySelective(update);
+                }
+            }
+        }
+
+    }
+
+    /**
+     * 释放vip
+     * @param vipCodes
+     */
+    private void updateVipCodes(String vipCodes) {
+        TVipCodes update = new TVipCodes();
+        TVipCodes codeParam = new TVipCodes();
+        codeParam.setVipCode(vipCodes);
+        TVipCodes codes = vipCodesMapper.selectByWhere(codeParam);
+        if (codes != null) {
+            update.setId(codes.getId());
+            update.setVipState(1);
+            vipCodesMapper.updateByPrimaryKeySelective(update);
+        }
+    }
+    @Override
+    public BigDecimal getEarnings(TokenBean token) {
+        return orderMapper.getEarnings(token.getMerchantId());
+    }
+
 }

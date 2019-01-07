@@ -46,6 +46,9 @@ public class TOrder implements Serializable {
     //第三方预支付id
     private String prepayId;
 
+    //卡名称
+    private String vipName;
+
     private static final long serialVersionUID = 1L;
 
     public Integer getId() {
@@ -158,6 +161,14 @@ public class TOrder implements Serializable {
 
     public void setVipEndDate(String vipEndDate) {
         this.vipEndDate = vipEndDate;
+    }
+
+    public String getVipName() {
+        return vipName;
+    }
+
+    public void setVipName(String vipName) {
+        this.vipName = vipName;
     }
 
     @Override

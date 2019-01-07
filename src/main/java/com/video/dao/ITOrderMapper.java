@@ -1,7 +1,9 @@
 package com.video.dao;
 
 import com.video.model.TOrder;
+import com.video.util.TokenBean;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -41,4 +43,16 @@ public interface ITOrderMapper {
      * @return
      */
     List<TOrder> getTimeOutOrder(Date date);
+    /**
+     * 获取收益
+     * @return
+     */
+    BigDecimal getEarnings(String merchantId);
+
+    /**
+     *连接条件查询，返回集合
+     */
+    List<TOrder> selectJojnListByWhere(TOrder record);
+
+
 }
