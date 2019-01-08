@@ -2,18 +2,18 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.video.dao.ITMerchantMapper" >
   <sql id="Base_Column_List" >
-    id, menchant_id, menchant_name
+    id, menchant_id as menchantId, menchant_name as menchantName,menchant_addr as menchantAddr,mobile
   </sql>
   
 	<!--批量添加-->
   <insert id="insertBatch" parameterType="java.util.List" >
     insert into t_merchant (id, 
-      menchant_id, menchant_name)
+      menchant_id, menchant_name,menchant_addr,mobile)
     values
 		<foreach collection="list" item="item" separator=",">
 			(
 			#{item.id}, 
-      #{item.menchantId}, #{item.menchantName})
+      #{item.menchantId}, #{item.menchantName}, #{item.menchantAddr}, #{item.mobile})
 		</foreach>
   </insert>
   
@@ -41,6 +41,12 @@
       <if test="menchantName != null" >
         menchant_name = #{menchantName,jdbcType=VARCHAR},
       </if>
+      <if test="menchantAddr != null" >
+        menchant_addr = #{menchantAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null" >
+        mobile = #{mobile,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -57,6 +63,12 @@
       <if test="menchantName != null" >
         and menchant_name = #{menchantName,jdbcType=VARCHAR}
       </if>
+      <if test="menchantAddr != null" >
+        menchant_addr = #{menchantAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null" >
+        mobile = #{mobile,jdbcType=VARCHAR},
+      </if>
     </where>
   </select>
   
@@ -71,6 +83,12 @@
       </if>
       <if test="menchantName != null" >
         and menchant_name = #{menchantName,jdbcType=VARCHAR}
+      </if>
+      <if test="menchantAddr != null" >
+        menchant_addr = #{menchantAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null" >
+        mobile = #{mobile,jdbcType=VARCHAR},
       </if>
     </where>
   </select>

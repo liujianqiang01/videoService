@@ -12,6 +12,10 @@ public class TMerchant implements Serializable {
      //商户名称
     private String menchantName;
 
+    private String menchantAddr;
+
+    private String mobile;
+
     private static final long serialVersionUID = 1L;
 
     public Integer getId() {
@@ -36,6 +40,22 @@ public class TMerchant implements Serializable {
 
     public void setMenchantName(String menchantName) {
         this.menchantName = menchantName == null ? null : menchantName.trim();
+    }
+
+    public String getMenchantAddr() {
+        return menchantAddr;
+    }
+
+    public void setMenchantAddr(String menchantAddr) {
+        this.menchantAddr = menchantAddr;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
     }
 
     @Override

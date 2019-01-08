@@ -1,6 +1,8 @@
 package com.video.service.impl;
 
+import com.video.dao.ITMerchantMapper;
 import com.video.dao.ITUserMapper;
+import com.video.model.TMerchant;
 import com.video.model.TUser;
 import com.video.service.UserService;
 import com.video.util.TokenBean;
@@ -20,7 +22,8 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     @Autowired
     ITUserMapper userMapper;
-
+    @Autowired
+    ITMerchantMapper merchantMapper;
     /**
      * 无论商户还是普通用户，第一次进入先绑定微信号的关系
      * 一个商户号不允许绑定多个商户
@@ -36,7 +39,15 @@ public class UserServiceImpl implements UserService {
         user.setUserType(tokenBean.getUserType());
         List<TUser> result = userMapper.selectListByWhere(user);
         if(result == null || result.size() <=0){//新增
-            if(user.getUserType() == 1){//判断商户号是否绑定
+            if(user.getUserType() == 1){
+                //判断商户号是否存在
+                TMerchant merchantParam = new TMerchant();
+                merchantParam.setMenchantId(tokenBean.getMerchantId());
+                TMerchant merchantResult = merchantMapper.selectByWhere(merchantParam);
+                if(merchantResult == null){
+                    return;
+                }
+                //判断商户号是否绑定
                 TUser merchant = new TUser();
                 merchant.setMenchantId(tokenBean.getMerchantId());
                 merchant.setUserType(tokenBean.getUserType());
