@@ -143,16 +143,4 @@ public class LoginController {
 		return ApiResponse.success(token);
 	}
 
-	/**
-	 * 补充商户信息
-	 * @param request
-	 * @param userInfo
-	 * @return
-	 */
-	public ApiResponse addMerchantInfo(HttpServletRequest request, TUser userInfo){
-
-
-		return ApiResponse.success();
-	}
-
 }

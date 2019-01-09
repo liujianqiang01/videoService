@@ -68,14 +68,16 @@ public class UserServiceImpl implements UserService {
         TUser user = new TUser();
         user.setOpenId(tokenBean.getOpenId());
         user.setMenchantId(tokenBean.getMerchantId());
-        TUser result = userMapper.selectByWhere(user);
-        if(result != null) {
-            TUser update = new TUser();
-            update.setUserId(result.getUserId());
-            update.setNickName(tokenBean.getNickName());
-            update.setGender(tokenBean.getGender());
-            update.setAvatarUrl(tokenBean.getAvatarUrl());
-            userMapper.updateByPrimaryKeySelective(update);
+        List<TUser> result = userMapper.selectListByWhere(user);
+        if(result != null ) {
+            for(TUser u : result) {
+                TUser update = new TUser();
+                update.setUserId(u.getUserId());
+                update.setNickName(tokenBean.getNickName());
+                update.setGender(tokenBean.getGender());
+                update.setAvatarUrl(tokenBean.getAvatarUrl());
+                userMapper.updateByPrimaryKeySelective(update);
+            }
         }
     }
 
@@ -84,5 +86,10 @@ public class UserServiceImpl implements UserService {
         TUser user = new TUser();
         user.setOpenId(openId);
         return  userMapper.selectListByWhere(user);
+    }
+
+    @Override
+    public List<TUser> findUser(TUser user) {
+        return userMapper.selectListByWhere(user);
     }
 }

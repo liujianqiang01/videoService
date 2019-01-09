@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,6 +25,7 @@ import javax.servlet.http.HttpServletRequest;
  * 统一下单接口
  */
 @Controller
+@RequestMapping("/order")
 public class OrderController {
 	private static Logger log = LoggerFactory.getLogger(OrderController.class);
 
@@ -48,7 +50,7 @@ public class OrderController {
 		String pageNum = requset.getParameter("pageNum");
 		String pageSize =  requset.getParameter("pageSize");
 		if(StringUtils.isEmpty(pageNum)){
-			pageNum = "1";
+			pageNum = "0";
 		}
 		if(StringUtils.isEmpty(pageSize)){
 			pageSize = "5";

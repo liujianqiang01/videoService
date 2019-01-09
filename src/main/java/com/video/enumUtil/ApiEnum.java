@@ -15,7 +15,8 @@ public enum ApiEnum {
     TOKEN_ERROR(-6, "登陆异常"),
     VIP_NULL(-7,"激活码已售空"),
     SUB_ORDER_ERROR(-8,"提交订单失败"),
-    NOT_MERCHANT(-9,"非商户类型");
+    NOT_MERCHANT(-9,"非商户类型"),
+    RESULT_NULL(-10, "返回为空");
     int errCode;
 
     String errMsg;

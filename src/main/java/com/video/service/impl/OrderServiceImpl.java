@@ -118,22 +118,23 @@ public class OrderServiceImpl implements OrderService {
         return ApiResponse.success(json.toJSONString());
     }
 
+
     @Override
     public  PageInfo<TOrder>  getOrder(String openId, Integer userType,int pageNum,int pageSize) {
         TOrder param = new TOrder();
         if (userType.equals(EnumUtil.MERCHANT_USER_TYPE.getCode())) {
             TUser userParam = new TUser();
             userParam.setOpenId(openId);
-            TUser userR = userMapper.selectByWhere(userParam);
+            List<TUser> userR = userMapper.selectListByWhere(userParam);
             if (userR != null) {
-                param.setMerchantId(userR.getMenchantId());
+                param.setMerchantId(userR.get(0).getMenchantId());
                 PageInfo<TOrder> orderPageInfo = PageHelper.startPage(pageNum, pageSize).setOrderBy("id desc").doSelectPageInfo(() -> orderMapper.selectJojnListByWhere(param));
                 return orderPageInfo;
             }
             return null;
         } else {
             param.setOpenId(openId);
-            PageInfo<TOrder> orderPageInfo = PageHelper.startPage(1, 1).setOrderBy("id desc").doSelectPageInfo(() -> orderMapper.selectJojnListByWhere(param));
+            PageInfo<TOrder> orderPageInfo = PageHelper.startPage(pageNum, pageSize).setOrderBy("id desc").doSelectPageInfo(() -> orderMapper.selectJojnListByWhere(param));
             return orderPageInfo;
         }
     }
