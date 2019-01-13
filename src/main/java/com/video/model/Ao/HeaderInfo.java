@@ -10,6 +10,7 @@ public class HeaderInfo {
     private String token;
     private Integer userType;
     private String merchantId;
+    private boolean showPay = false;
 
     public String getSessionId() {
         return sessionId;
@@ -37,6 +38,14 @@ public class HeaderInfo {
 
     public String getMerchantId() {
         return merchantId;
+    }
+
+    public boolean isShowPay() {
+        return showPay;
+    }
+
+    public void setShowPay(boolean showPay) {
+        this.showPay = showPay;
     }
 
     public void setMerchantId(String merchantId) {

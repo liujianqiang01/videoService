@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,4 +33,13 @@ public class VipPriceController {
         return ApiResponse.success(tVipPrices);
     }
 
+    @PostMapping("/getBanner")
+    @ResponseBody
+    public ApiResponse getBanner(){
+        List<String> banners = new ArrayList<>();
+        banners.add("https://filmunion.com.cn/video/image/banner1.jpeg");
+        banners.add("https://filmunion.com.cn/video/image/banner2.jpeg");
+       // banners.add("https://filmunion.com.cn/video/image/banner3.jpeg");
+        return ApiResponse.success(banners);
+    }
 }
