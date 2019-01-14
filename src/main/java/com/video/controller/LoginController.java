@@ -89,24 +89,10 @@ public class LoginController {
 		tokenBean.setOpenId(jsonObject.getString("openid"));
 		tokenBean.setSession_key(jsonObject.getString("session_key"));
 		tokenBean.setToken(token);
-		String param = request.getParameter("param");
-		log.info("登陆参数：param ="+param );
-		String merchantId = "";
-		String userTypeStr = "";
-		if(!StringUtils.isEmpty(param)){
-			String[] params = param.split(",");
-			if(params.length >1){
-				merchantId = params[0];
-				userTypeStr = params[1];
-			}
-		}
+		String merchantId = request.getParameter("merchantId");
+		log.info("登陆参数：merchantId ="+merchantId );
 
-
-		log.info("登陆参数：merchantId ="+merchantId +"，userType="+userTypeStr);
-		Integer userType = null ;
-		if(!StringUtils.isEmpty(userTypeStr)){
-			userType = Integer.valueOf(userTypeStr);
-		}
+		Integer userType = null;
 		//用户第一次绑定商户，那么永久属于第一次绑定的商户
 		List<TUser> tuser = userService.getTuser(tokenBean.getOpenId());
 		if(tuser != null && tuser.size()>0){
@@ -123,7 +109,7 @@ public class LoginController {
 			}
 		}
 		//如果未查到用户绑定信息，那么就用平台的信息
-		if(StringUtils.isEmpty(merchantId) || userType == null){
+		if(StringUtils.isEmpty(merchantId)){
 			merchantId = "Admin";
 			userType = 0;
 		}

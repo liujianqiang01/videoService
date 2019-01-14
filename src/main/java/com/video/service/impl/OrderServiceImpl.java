@@ -346,7 +346,11 @@ public class OrderServiceImpl implements OrderService {
     }
     @Override
     public BigDecimal getEarnings(TokenBean token) {
-        return orderMapper.getEarnings(token.getMerchantId());
+        BigDecimal earnings = orderMapper.getEarnings(token.getMerchantId());
+        if(earnings == null){
+            earnings = BigDecimal.ZERO;
+        }
+        return earnings;
     }
 
 }

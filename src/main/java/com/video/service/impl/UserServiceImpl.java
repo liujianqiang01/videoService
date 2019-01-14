@@ -36,7 +36,18 @@ public class UserServiceImpl implements UserService {
         TUser user = new TUser();
         user.setOpenId(tokenBean.getOpenId());
         user.setMenchantId(tokenBean.getMerchantId());
-        user.setUserType(tokenBean.getUserType());
+        user.setUserType(1);
+        //判断商户号是否绑定
+        TUser merchant = new TUser();
+        merchant.setMenchantId(tokenBean.getMerchantId());
+        merchant.setUserType(1);
+        List<TUser> merchantList = userMapper.selectListByWhere(merchant);
+        if(merchantList != null && merchantList.size() >0){
+            user.setUserType(0);
+        }
+        if(tokenBean.getUserType() == null){
+            tokenBean.setUserType(user.getUserType());
+        }
         List<TUser> result = userMapper.selectListByWhere(user);
         if(result == null || result.size() <=0){//新增
             if(user.getUserType() == 1){
@@ -47,20 +58,13 @@ public class UserServiceImpl implements UserService {
                 if(merchantResult == null){
                     return;
                 }
-                //判断商户号是否绑定
-                TUser merchant = new TUser();
-                merchant.setMenchantId(tokenBean.getMerchantId());
-                merchant.setUserType(tokenBean.getUserType());
-                List<TUser> merchantList = userMapper.selectListByWhere(merchant);
-                if(merchantList != null && merchantList.size() >0){
-                    return;
-                }
             }
             BeanUtils.copyProperties(tokenBean,user);
             List<TUser> paramList = new ArrayList<>();
             paramList.add(user);
             userMapper.insertBatch(paramList);
         }
+
     }
 
     @Override
