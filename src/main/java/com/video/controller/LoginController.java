@@ -91,20 +91,20 @@ public class LoginController {
 		tokenBean.setToken(token);
 		String param = request.getParameter("param");
 		log.info("登陆参数：param ="+param );
-		if(StringUtils.isEmpty(param)){
-			return null;
+		String merchantId = "";
+		String userTypeStr = "";
+		if(!StringUtils.isEmpty(param)){
+			String[] params = param.split(",");
+			if(params.length >1){
+				merchantId = params[0];
+				userTypeStr = params[1];
+			}
 		}
-		String[] params = param.split(",");
-		if(params.length <=1){
-			return null;
-		}
-		String merchantId = params[0];
-		String userTypeStr = params[1];
+
+
 		log.info("登陆参数：merchantId ="+merchantId +"，userType="+userTypeStr);
-		Integer userType ;
-		if(StringUtils.isEmpty(userTypeStr)){
-			userType = null;
-		}else {
+		Integer userType = null ;
+		if(!StringUtils.isEmpty(userTypeStr)){
 			userType = Integer.valueOf(userTypeStr);
 		}
 		//用户第一次绑定商户，那么永久属于第一次绑定的商户
