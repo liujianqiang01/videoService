@@ -39,7 +39,7 @@ public class LoginController {
 	@ResponseBody
 	public ApiResponse getToken(HttpServletRequest request) throws Exception{
 		String code = request.getParameter("code");
-		log.info("code="+code);
+		log.info("登陆参数：code="+code);
 		if(StringUtils.isEmpty(code)){
 			log.error("微信登陆code为空！");
 			return ApiResponse.fail(ApiEnum.PARAM_NULL);
@@ -89,8 +89,18 @@ public class LoginController {
 		tokenBean.setOpenId(jsonObject.getString("openid"));
 		tokenBean.setSession_key(jsonObject.getString("session_key"));
 		tokenBean.setToken(token);
-		String merchantId = request.getParameter("merchantId");
-		String userTypeStr = request.getParameter("userType");
+		String param = request.getParameter("param");
+		log.info("登陆参数：param ="+param );
+		if(StringUtils.isEmpty(param)){
+			return null;
+		}
+		String[] params = param.split(",");
+		if(params.length <=1){
+			return null;
+		}
+		String merchantId = params[0];
+		String userTypeStr = params[1];
+		log.info("登陆参数：merchantId ="+merchantId +"，userType="+userTypeStr);
 		Integer userType ;
 		if(StringUtils.isEmpty(userTypeStr)){
 			userType = null;

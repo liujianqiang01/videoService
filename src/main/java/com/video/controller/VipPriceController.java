@@ -39,7 +39,7 @@ public class VipPriceController {
         List<String> banners = new ArrayList<>();
         banners.add("https://filmunion.com.cn/video/image/banner1.jpeg");
         banners.add("https://filmunion.com.cn/video/image/banner2.jpeg");
-       // banners.add("https://filmunion.com.cn/video/image/banner3.jpeg");
+        banners.add("https://filmunion.com.cn/video/image/banner3.jpeg");
         return ApiResponse.success(banners);
     }
 }
