@@ -127,7 +127,11 @@ public class OrderServiceImpl implements OrderService {
             userParam.setOpenId(openId);
             List<TUser> userR = userMapper.selectListByWhere(userParam);
             if (userR != null) {
-                param.setMerchantId(userR.get(0).getMenchantId());
+                for(TUser u : userR){
+                    if(u.getUserType() == 1) {
+                        param.setMerchantId(u.getMenchantId());
+                    }
+                }
                 PageInfo<TOrder> orderPageInfo = PageHelper.startPage(pageNum, pageSize).setOrderBy("id desc").doSelectPageInfo(() -> orderMapper.selectJojnListByWhere(param));
                 return orderPageInfo;
             }
@@ -216,7 +220,7 @@ public class OrderServiceImpl implements OrderService {
             order.setVipState(0);
             order.setVipStartTime(new Date());
             long now = System.currentTimeMillis();
-            long to = (86400000 * vipPrice.getIndate());
+            long to = (86400000L * vipPrice.getIndate());
             order.setVipEndTime(new Date(now + to));
             tVipCodes.setVipState(0);
             vipCodesMapper.updateByPrimaryKeySelective(tVipCodes);
@@ -233,7 +237,7 @@ public class OrderServiceImpl implements OrderService {
     private synchronized int getCount() {
         count += 1;
         int next = count;
-        if (count > 2) {//大于100归0
+        if (count > 10) {//大于100归0
             count = 0;
         }
         return next;

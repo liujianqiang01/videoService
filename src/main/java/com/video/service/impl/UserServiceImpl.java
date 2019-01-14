@@ -1,5 +1,6 @@
 package com.video.service.impl;
 
+import com.alibaba.druid.util.StringUtils;
 import com.video.dao.ITMerchantMapper;
 import com.video.dao.ITUserMapper;
 import com.video.model.TMerchant;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -33,38 +35,35 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public void addUserInfo(TokenBean tokenBean) {
+        String merchantId = tokenBean.getMerchantId();
         TUser user = new TUser();
         user.setOpenId(tokenBean.getOpenId());
-        user.setMenchantId(tokenBean.getMerchantId());
-        user.setUserType(1);
-        //判断商户号是否绑定
+        user.setMenchantId(merchantId);
+        //判断商户号是否绑定对应的商户
         TUser merchant = new TUser();
-        merchant.setMenchantId(tokenBean.getMerchantId());
+        merchant.setMenchantId(merchantId);
         merchant.setUserType(1);
-        List<TUser> merchantList = userMapper.selectListByWhere(merchant);
-        if(merchantList != null && merchantList.size() >0){
-            user.setUserType(0);
-        }
-        if(tokenBean.getUserType() == null){
-            tokenBean.setUserType(user.getUserType());
-        }
-        List<TUser> result = userMapper.selectListByWhere(user);
-        if(result == null || result.size() <=0){//新增
-            if(user.getUserType() == 1){
-                //判断商户号是否存在
-                TMerchant merchantParam = new TMerchant();
-                merchantParam.setMenchantId(tokenBean.getMerchantId());
-                TMerchant merchantResult = merchantMapper.selectByWhere(merchantParam);
-                if(merchantResult == null){
-                    return;
-                }
+        List<TUser> result = userMapper.selectListByWhere(merchant);
+        if((result == null|| result.size() <= 0) &&
+                (tokenBean.getUserType() == null ||tokenBean.getUserType() == 0)){//当商户号没有绑定商户关系并且用户不是商户
+            user.setUserType(1);
+        }else {//当用户没有绑定任何商户情况，则可以成为普通用户
+            if(tokenBean.getUserType() == null || tokenBean.getUserType() == 1) {
+                user.setUserType(0);
             }
-            BeanUtils.copyProperties(tokenBean,user);
-            List<TUser> paramList = new ArrayList<>();
-            paramList.add(user);
-            userMapper.insertBatch(paramList);
         }
 
+        //判断商户号是否存在
+        TMerchant merchantParam = new TMerchant();
+        merchantParam.setMenchantId(tokenBean.getMerchantId());
+        TMerchant merchantResult = merchantMapper.selectByWhere(merchantParam);
+        if(merchantResult == null){
+            return;
+        }
+        List<TUser> paramList = new ArrayList<>();
+        paramList.add(user);
+        userMapper.insertBatch(paramList);
+        tokenBean.setUserType(user.getUserType());
     }
 
     @Override
