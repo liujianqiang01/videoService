@@ -6,7 +6,7 @@ import com.video.common.Configure;
 import com.video.common.RandomStringGenerator;
 import com.video.common.Signature;
 import com.video.enumUtil.ApiEnum;
-import com.video.model.Ao.SignInfo;
+import com.video.model.ao.SignInfo;
 import com.video.util.ApiResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -47,10 +47,8 @@ public class UserServiceImpl implements UserService {
         if((result == null|| result.size() <= 0) &&
                 (tokenBean.getUserType() == null ||tokenBean.getUserType() == 0)){//当商户号没有绑定商户关系并且用户不是商户
             user.setUserType(1);
-        }else {//当用户没有绑定任何商户情况，则可以成为普通用户
-            if(tokenBean.getUserType() == null || tokenBean.getUserType() == 1) {
-                user.setUserType(0);
-            }
+        }else {
+            user.setUserType(0);
         }
 
         //判断商户号是否存在
@@ -60,9 +58,17 @@ public class UserServiceImpl implements UserService {
         if(merchantResult == null){
             return;
         }
-        List<TUser> paramList = new ArrayList<>();
-        paramList.add(user);
-        userMapper.insertBatch(paramList);
+        //判断某个用户是否已经存在对应关系的商户号
+        TUser check = new TUser();
+        check.setMenchantId(merchantId);
+        check.setUserType(user.getUserType());
+        check.setOpenId(tokenBean.getOpenId());
+        List<TUser> checkResult = userMapper.selectListByWhere(check);
+        if(checkResult == null || checkResult.size() <= 0) {
+            List<TUser> paramList = new ArrayList<>();
+            paramList.add(user);
+            userMapper.insertBatch(paramList);
+        }
         tokenBean.setUserType(user.getUserType());
     }
 

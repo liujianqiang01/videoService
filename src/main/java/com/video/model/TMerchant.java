@@ -1,6 +1,7 @@
 package com.video.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 public class TMerchant implements Serializable {
      //主键
@@ -15,6 +16,8 @@ public class TMerchant implements Serializable {
     private String menchantAddr;
 
     private String mobile;
+
+    private BigDecimal rate;
 
     private static final long serialVersionUID = 1L;
 
@@ -56,6 +59,14 @@ public class TMerchant implements Serializable {
 
     public void setMobile(String mobile) {
         this.mobile = mobile;
+    }
+
+    public BigDecimal getRate() {
+        return rate;
+    }
+
+    public void setRate(BigDecimal rate) {
+        this.rate = rate;
     }
 
     @Override

@@ -1,8 +1,9 @@
 package com.video.service;
 
 import com.github.pagehelper.PageInfo;
-import com.video.model.Ao.PayResultInfo;
+import com.video.model.ao.PayResultInfo;
 import com.video.model.TOrder;
+import com.video.model.vo.Earnings;
 import com.video.util.ApiResponse;
 import com.video.util.TokenBean;
 
@@ -55,5 +56,5 @@ public interface OrderService {
      * 获取收益
      * @return
      */
-    BigDecimal getEarnings(TokenBean token);
+    Earnings getEarnings(TokenBean token);
 }

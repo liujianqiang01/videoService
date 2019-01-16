@@ -53,7 +53,7 @@ public class OrderController {
 			pageNum = "0";
 		}
 		if(StringUtils.isEmpty(pageSize)){
-			pageSize = "5";
+			pageSize = "10";
 		}
 		PageInfo<TOrder> order = orderService.getOrder(token.getOpenId(),token.getUserType(),Integer.valueOf(pageNum),Integer.valueOf(pageSize));
 		for(TOrder o : order.getList()){
@@ -62,6 +62,10 @@ public class OrderController {
 			//未支付成功的订单不展示vip编码
 			if(o.getOrderState() == 1){
 				o.setVipCode("");
+			}
+			//是否展示激活码
+			if(token.getOpenId().equals(o.getOpenId())){
+				o.setShowVipCode(true);
 			}
 		}
 		return ApiResponse.success(order);
@@ -75,7 +79,7 @@ public class OrderController {
 			return ApiResponse.fail(ApiEnum.TOKEN_ERROR);
 		}
 		if(token.getUserType().equals(EnumUtil.COMMION_USER_TYPE.getCode())){
-			return ApiResponse.fail(ApiEnum.NOT_MERCHANT);
+			return ApiResponse.fail(ApiEnum.NOT_MERCHANT_TYPE);
 		}
 		if(StringUtils.isEmpty(token.getMerchantId())){
 			return ApiResponse.fail(ApiEnum.PARAM_ERROR);

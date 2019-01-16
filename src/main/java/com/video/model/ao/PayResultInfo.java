@@ -1,4 +1,4 @@
-package com.video.model.Ao;
+package com.video.model.ao;
 
 /**
  * @Author: liujianqiang

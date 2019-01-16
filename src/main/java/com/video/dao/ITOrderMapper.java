@@ -44,10 +44,10 @@ public interface ITOrderMapper {
      */
     List<TOrder> getTimeOutOrder(Date date);
     /**
-     * 获取收益
+     * 获取未收益
      * @return
      */
-    BigDecimal getEarnings(String merchantId);
+    BigDecimal getUnEarnings(String merchantId);
 
     /**
      *连接条件查询，返回集合

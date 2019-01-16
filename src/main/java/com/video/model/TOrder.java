@@ -49,6 +49,17 @@ public class TOrder implements Serializable {
     //卡名称
     private String vipName;
 
+    //是否展示激活码
+    private boolean showVipCode = false;
+
+    public boolean isShowVipCode() {
+        return showVipCode;
+    }
+
+    public void setShowVipCode(boolean showVipCode) {
+        this.showVipCode = showVipCode;
+    }
+
     private static final long serialVersionUID = 1L;
 
     public Integer getId() {

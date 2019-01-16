@@ -2,8 +2,7 @@ package com.video.controller;
 
 import com.thoughtworks.xstream.XStream;
 import com.video.common.StreamUtil;
-import com.video.model.Ao.OrderSync;
-import com.video.model.Ao.PayResultInfo;
+import com.video.model.ao.PayResultInfo;
 import com.video.service.OrderService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

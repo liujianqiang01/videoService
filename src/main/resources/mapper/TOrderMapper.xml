@@ -163,14 +163,13 @@
     where vip_start_time  &lt; #{date} and order_state = 1
   </select>
 
-  <!--根据主键Id查询-->
-  <select id="getEarnings" resultType="java.math.BigDecimal" parameterType="java.lang.String" >
+  <!--未收益统计-->
+  <select id="getUnEarnings" resultType="java.math.BigDecimal" parameterType="java.lang.String" >
      select
     sum(order_price) as earnings
     from t_order
-    where order_state = 3 and merchant_id = #{merchantId}
+    where order_state = 3 and merchant_id = #{merchantId} and settle_account_state = 0
   </select>
-
   <!--条件查询，返回集合-->
   <select id="selectJojnListByWhere" resultType="com.video.model.TOrder" parameterType="com.video.model.TOrder" >
     select

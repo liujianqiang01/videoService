@@ -2,7 +2,6 @@ package com.video.service.impl;
 
 import com.alibaba.druid.util.StringUtils;
 import com.alibaba.fastjson.JSONObject;
-import com.github.pagehelper.PageException;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.thoughtworks.xstream.XStream;
@@ -10,17 +9,12 @@ import com.video.common.Configure;
 import com.video.common.HttpRequest;
 import com.video.common.RandomStringGenerator;
 import com.video.common.Signature;
-import com.video.dao.ITOrderMapper;
-import com.video.dao.ITUserMapper;
-import com.video.dao.ITVipCodesMapper;
-import com.video.dao.ITVipPriceMapper;
+import com.video.dao.*;
 import com.video.enumUtil.EnumUtil;
 import com.video.enumUtil.TradeState;
-import com.video.model.Ao.*;
-import com.video.model.TOrder;
-import com.video.model.TUser;
-import com.video.model.TVipCodes;
-import com.video.model.TVipPrice;
+import com.video.model.*;
+import com.video.model.ao.*;
+import com.video.model.vo.Earnings;
 import com.video.service.OrderService;
 import com.video.enumUtil.ApiEnum;
 import com.video.util.ApiResponse;
@@ -54,6 +48,10 @@ public class OrderServiceImpl implements OrderService {
     ITVipCodesMapper vipCodesMapper;
     @Autowired
     ITUserMapper userMapper;
+    @Autowired
+    ITMerchantMapper merchantMapper;
+    @Autowired
+    ITSettleAccountMapper settleAccountMapper;
     private static int count = 0;
 
     @Override
@@ -61,15 +59,19 @@ public class OrderServiceImpl implements OrderService {
         JSONObject json = new JSONObject();
         try {
             TokenBean token = TokenUtil.getToken();
+            log.info("---------下单 token : " + token);
             if (token == null) {
-                log.info("---------下单 token : " + token);
                 return ApiResponse.fail(ApiEnum.TOKEN_ERROR);
             }
 
             String openid = token.getOpenId();
+            log.info("---------下单 openid : " + openid);
             if (StringUtils.isEmpty(openid)) {
-                log.info("---------下单 openid : " + openid);
                 return ApiResponse.fail(ApiEnum.OPENID_NULL);
+            }
+            log.info("---------下单 merchantId : " + token.getMerchantId());
+            if(StringUtils.isEmpty(token.getMerchantId())){
+                return ApiResponse.fail(ApiEnum.NOT_MERCHANT);
             }
             //获取vip价格
             TVipPrice vipPriceParam = new TVipPrice();
@@ -349,11 +351,22 @@ public class OrderServiceImpl implements OrderService {
         }
     }
     @Override
-    public BigDecimal getEarnings(TokenBean token) {
-        BigDecimal earnings = orderMapper.getEarnings(token.getMerchantId());
-        if(earnings == null){
-            earnings = BigDecimal.ZERO;
+    public Earnings getEarnings(TokenBean token) {
+        BigDecimal unEarnings = orderMapper.getUnEarnings(token.getMerchantId());
+        if(unEarnings == null){
+            unEarnings = BigDecimal.ZERO;
         }
+        TMerchant po = new TMerchant();
+        po.setMenchantId(token.getMerchantId());
+        TMerchant merchant = merchantMapper.selectByWhere(po);
+        unEarnings = unEarnings.multiply(merchant.getRate()).setScale(2,BigDecimal.ROUND_HALF_UP);
+        Earnings earnings = new Earnings();
+        earnings.setUnEarning(unEarnings);
+        BigDecimal earning = settleAccountMapper.getEarnings(token.getMerchantId());
+        if(earning == null){
+            earning = BigDecimal.ZERO;
+        }
+        earnings.setEarning(earning);
         return earnings;
     }
 

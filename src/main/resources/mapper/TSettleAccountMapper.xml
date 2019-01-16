@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.video.dao.ITSettleAccountMapper" >
+  <resultMap id="BaseResultMap" type="com.video.model.TSettleAccount" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="remittance_state" property="remittanceState" jdbcType="INTEGER" />
+    <result column="settle_account_price" property="settleAccountPrice" jdbcType="DECIMAL" />
+    <result column="settle_account_start_time" property="settleAccountStartTime" jdbcType="TIMESTAMP" />
+    <result column="settle_account_end_time" property="settleAccountEndTime" jdbcType="TIMESTAMP" />
+    <result column="rate_price" property="ratePrice" jdbcType="DECIMAL" />
+    <result column="merchant_id" property="merchantId" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, remittance_state, settle_account_price, settle_account_start_time, settle_account_end_time, 
+    rate_price, merchant_id
+  </sql>
+  
+	<!--批量添加-->
+  <insert id="insertBatch" parameterType="java.util.List" >
+    insert into t_settle_account (id, 
+      remittance_state, settle_account_price, settle_account_start_time, 
+      settle_account_end_time, rate_price, merchant_id)
+    values
+		<foreach collection="list" item="item" separator=",">
+			(
+			#{item.id}, 
+      #{item.remittanceState}, #{item.settleAccountPrice}, #{item.settleAccountStartTime}, 
+      #{item.settleAccountEndTime}, #{item.ratePrice}, #{item.merchantId})
+		</foreach>
+  </insert>
+  
+	<!--根据主键Id删除-->
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_settle_account
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  
+	<!--根据主键Id查询-->
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_settle_account
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+	<!--根据主键Id修改-->
+  <update id="updateByPrimaryKeySelective" parameterType="com.video.model.TSettleAccount" >
+    update t_settle_account
+    <set >
+      <if test="remittanceState != null" >
+        remittance_state = #{remittanceState,jdbcType=INTEGER},
+      </if>
+      <if test="settleAccountPrice != null" >
+        settle_account_price = #{settleAccountPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="settleAccountStartTime != null" >
+        settle_account_start_time = #{settleAccountStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="settleAccountEndTime != null" >
+        settle_account_end_time = #{settleAccountEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ratePrice != null" >
+        rate_price = #{ratePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="merchantId != null" >
+        merchant_id = #{merchantId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+	<!--根据类属性查询集合-->
+  <select id="selectListByClassElement" resultMap="BaseResultMap" parameterType="com.video.model.TSettleAccount" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_settle_account
+    <where >
+      <if test="remittanceState != null" >
+        and remittance_state = #{remittanceState,jdbcType=INTEGER}
+      </if>
+      <if test="settleAccountPrice != null" >
+        and settle_account_price = #{settleAccountPrice,jdbcType=DECIMAL}
+      </if>
+      <if test="settleAccountStartTime != null" >
+        and settle_account_start_time = #{settleAccountStartTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="settleAccountEndTime != null" >
+        and settle_account_end_time = #{settleAccountEndTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="ratePrice != null" >
+        and rate_price = #{ratePrice,jdbcType=DECIMAL}
+      </if>
+      <if test="merchantId != null" >
+        and merchant_id = #{merchantId,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+  
+	<!--根据类属性查询-->
+  <select id="selectByClassElement" resultMap="BaseResultMap" parameterType="com.video.model.TSettleAccount" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_settle_account
+    <where >
+      <if test="remittanceState != null" >
+        and remittance_state = #{remittanceState,jdbcType=INTEGER}
+      </if>
+      <if test="settleAccountPrice != null" >
+        and settle_account_price = #{settleAccountPrice,jdbcType=DECIMAL}
+      </if>
+      <if test="settleAccountStartTime != null" >
+        and settle_account_start_time = #{settleAccountStartTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="settleAccountEndTime != null" >
+        and settle_account_end_time = #{settleAccountEndTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="ratePrice != null" >
+        and rate_price = #{ratePrice,jdbcType=DECIMAL}
+      </if>
+      <if test="merchantId != null" >
+        and merchant_id = #{merchantId,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+
+  <select id="getEarnings" resultType="java.math.BigDecimal" parameterType="java.lang.String" >
+     select
+    sum(rate_price) as earnings
+    from t_settle_account
+    where  merchant_id = #{merchantId}
+  </select>
+</mapper>

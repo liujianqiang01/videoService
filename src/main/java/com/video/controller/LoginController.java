@@ -4,7 +4,7 @@ package com.video.controller;
 import com.alibaba.druid.util.StringUtils;
 import com.alibaba.fastjson.JSONObject;
 import com.video.common.Configure;
-import com.video.model.Ao.HeaderInfo;
+import com.video.model.ao.HeaderInfo;
 import com.video.model.TUser;
 import com.video.service.UserService;
 import com.video.enumUtil.ApiEnum;
@@ -116,11 +116,14 @@ public class LoginController {
             //搜索登陆,并且没有绑定任何商户
             if(StringUtils.isEmpty(merchantId) && user == null){
                 tokenBean.setMerchantId("Admin");
+            }else if(StringUtils.isEmpty(merchantId)){
+                tokenBean.setMerchantId(user.getMenchantId());
             }
             //如果已经绑定，添加绑定的类型，此处只有绑定一种关系
             if(user != null){
                 tokenBean.setUserType(user.getUserType());
             }
+            log.info("用户类型：userType =" + tokenBean.getUserType());
             userService.addUserInfo(tokenBean);
         }
         //放入session中
