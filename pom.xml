@@ -120,8 +120,12 @@
 	<build>
 		<plugins>
 			<plugin>
+				<!--热部署-->
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<fork>true</fork>
+				</configuration>
 			</plugin>
 		</plugins>
 		<finalName>video</finalName>
