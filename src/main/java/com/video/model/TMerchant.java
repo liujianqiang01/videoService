@@ -19,6 +19,8 @@ public class TMerchant implements Serializable {
 
     private BigDecimal rate;
 
+    private Integer state;
+
     private static final long serialVersionUID = 1L;
 
     public Integer getId() {
@@ -67,6 +69,14 @@ public class TMerchant implements Serializable {
 
     public void setRate(BigDecimal rate) {
         this.rate = rate;
+    }
+
+    public Integer getState() {
+        return state;
+    }
+
+    public void setState(Integer state) {
+        this.state = state;
     }
 
     @Override

@@ -10,6 +10,7 @@ import com.video.util.TokenBean;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -34,6 +35,7 @@ public class UserServiceImpl implements UserService {
      * @param tokenBean
      */
     @Override
+    @Transactional
     public void addUserInfo(TokenBean tokenBean) {
         String merchantId = tokenBean.getMerchantId();
         TUser user = new TUser();
@@ -60,11 +62,16 @@ public class UserServiceImpl implements UserService {
         }
         //判断某个用户是否已经存在对应关系的商户号
         TUser check = new TUser();
-        check.setMenchantId(merchantId);
         check.setUserType(user.getUserType());
         check.setOpenId(tokenBean.getOpenId());
         List<TUser> checkResult = userMapper.selectListByWhere(check);
         if(checkResult == null || checkResult.size() <= 0) {
+            if(user.getUserType() == 1) {
+                TMerchant updateMerchant = new TMerchant();
+                updateMerchant.setState(1);
+                updateMerchant.setId(merchantResult.getId());
+                merchantMapper.updateByPrimaryKeySelective(updateMerchant);
+            }
             List<TUser> paramList = new ArrayList<>();
             paramList.add(user);
             userMapper.insertBatch(paramList);
