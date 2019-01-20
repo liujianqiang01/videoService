@@ -52,7 +52,7 @@ public class OrderServiceImpl implements OrderService {
     ITMerchantMapper merchantMapper;
     @Autowired
     ITSettleAccountMapper settleAccountMapper;
-    private static int count = 0;
+    private static int count = -1;
 
     @Override
     public ApiResponse subOrder(Integer vipType) {
@@ -216,7 +216,20 @@ public class OrderServiceImpl implements OrderService {
      * 获取vip
      */
     private void getVip(TOrder order, TVipPrice vipPrice) {
-        TVipCodes tVipCodes = vipCodesMapper.selectOneByWhere(vipPrice.getVipType(), 1, getCount());
+        TokenBean tokenBean = TokenUtil.getToken();
+        if(tokenBean == null || StringUtils.isEmpty(tokenBean.getMerchantId())){
+            log.error("tokenBean 为空！");
+            return;
+        }
+        //如果是代理商那么先查看一下代理商是否批发
+
+        TVipCodes tVipCodes = null ;
+        if(!"Admin".equals(tokenBean.getMerchantId())){
+            tVipCodes = vipCodesMapper.selectOneByWhere(vipPrice.getVipType(), 1, getCount(),tokenBean.getMerchantId());
+        }
+        if(tVipCodes == null){
+            tVipCodes = vipCodesMapper.selectOneByWhere(vipPrice.getVipType(), 1, getCount(), "Admin");
+        }
         if (tVipCodes != null) {
             order.setVipCode(tVipCodes.getVipCode());
             order.setVipState(0);
@@ -239,7 +252,7 @@ public class OrderServiceImpl implements OrderService {
     private synchronized int getCount() {
         count += 1;
         int next = count;
-        if (count > 10) {//大于100归0
+        if (count > 5) {//大于100归0
             count = 0;
         }
         return next;

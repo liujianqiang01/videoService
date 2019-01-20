@@ -97,6 +97,6 @@
   <select id="selectOneByWhere" resultType="com.video.model.TVipCodes" parameterType="com.video.model.TVipCodes" >
     select
     <include refid="Base_Column_List" />
-    from t_vip_codes where vip_type = #{vipType} and vip_state = #{vipState} limit #{limit} , 1
+    from t_vip_codes where vip_type = #{vipType} and vip_state = #{vipState} and merchant_id = #{merchantId} limit #{limit} , 1
   </select>
 </mapper>

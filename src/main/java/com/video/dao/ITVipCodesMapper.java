@@ -36,5 +36,5 @@ public interface ITVipCodesMapper {
     */
     TVipCodes selectByWhere(TVipCodes record);
 
-    TVipCodes selectOneByWhere(@Param("vipType") Integer vipType, @Param("vipState")Integer vipState, @Param("limit")int limit);
+    TVipCodes selectOneByWhere(@Param("vipType") Integer vipType, @Param("vipState")Integer vipState, @Param("limit")int limit,@Param("merchantId")String merchantId);
 }
