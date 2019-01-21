@@ -16,7 +16,7 @@ import java.util.List;
 @Service
 public class VipPriceServiceImpl implements VipPriceService {
     @Autowired
-    ITVipPriceMapper vipPriceMapper;
+    private ITVipPriceMapper vipPriceMapper;
     @Override
     public int insertBatch(List<TVipPrice> record) {
         return vipPriceMapper.insertBatch(record);

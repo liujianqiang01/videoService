@@ -1,6 +1,5 @@
 package com.video.controller;
 
-import com.video.model.ao.WholesaleAo;
 import com.video.service.WholesalePriceService;
 import com.video.util.ApiResponse;
 import org.slf4j.Logger;

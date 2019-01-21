@@ -23,9 +23,9 @@ import java.util.Map;
 public class WholesalePriceServiceImpl implements WholesalePriceService {
 
     @Autowired
-    ITWholesalePriceMapper wholesalePriceMapper;
+    private ITWholesalePriceMapper wholesalePriceMapper;
     @Autowired
-    ITVipCodesMapper vipCodesMapper;
+    private ITVipCodesMapper vipCodesMapper;
 
     @Override
     public Map<String,Object> getCountPrice(String[] numbers) {

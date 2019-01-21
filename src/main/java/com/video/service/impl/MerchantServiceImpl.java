@@ -15,7 +15,7 @@ import java.util.List;
 @Service
 public class MerchantServiceImpl implements MerchantService {
     @Autowired
-    ITMerchantMapper merchantMapper;
+    private ITMerchantMapper merchantMapper;
     @Override
     public int insertBatch(List<TMerchant> record) {
         return merchantMapper.insertBatch(record);

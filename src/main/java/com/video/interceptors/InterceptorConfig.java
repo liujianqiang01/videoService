@@ -23,7 +23,8 @@ public class InterceptorConfig implements WebMvcConfigurer {
                 .excludePathPatterns("/login/**").excludePathPatterns("/payNotify/**").excludePathPatterns("/getVipType")
         .excludePathPatterns("/html/**");*/
 
-        registry.addInterceptor(tokenInterceptor).addPathPatterns("/order/**").addPathPatterns("/getPayForm").addPathPatterns("/merchant/**");
+        registry.addInterceptor(tokenInterceptor).addPathPatterns("/order/**").addPathPatterns("/getPayForm").addPathPatterns("/merchant/**")
+                .addPathPatterns("/wholesaleOrder/**");
     }
 
 }

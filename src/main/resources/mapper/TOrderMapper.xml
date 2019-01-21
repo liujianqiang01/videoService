@@ -189,7 +189,7 @@
         and order_price = #{orderPrice,jdbcType=DECIMAL}
       </if>
       <if test="merchantId != null" >
-        and merchant_id = #{merchantId,jdbcType=VARCHAR}
+        and o.merchant_id = #{merchantId,jdbcType=VARCHAR}
       </if>
       <if test="openId != null" >
         and open_id = #{openId,jdbcType=VARCHAR}

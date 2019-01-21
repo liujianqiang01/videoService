@@ -17,6 +17,7 @@ import com.video.model.ao.*;
 import com.video.model.vo.Earnings;
 import com.video.service.OrderService;
 import com.video.enumUtil.ApiEnum;
+import com.video.service.WholesaleOrderService;
 import com.video.util.ApiResponse;
 import com.video.util.TokenBean;
 import com.video.util.TokenUtil;
@@ -41,17 +42,19 @@ import java.util.List;
 public class OrderServiceImpl implements OrderService {
     private static Logger log = LoggerFactory.getLogger(OrderServiceImpl.class);
     @Autowired
-    ITOrderMapper orderMapper;
+    private ITOrderMapper orderMapper;
     @Autowired
-    ITVipPriceMapper vipPriceMapper;
+    private ITVipPriceMapper vipPriceMapper;
     @Autowired
-    ITVipCodesMapper vipCodesMapper;
+    private ITVipCodesMapper vipCodesMapper;
     @Autowired
-    ITUserMapper userMapper;
+    private ITUserMapper userMapper;
     @Autowired
-    ITMerchantMapper merchantMapper;
+    private ITMerchantMapper merchantMapper;
     @Autowired
-    ITSettleAccountMapper settleAccountMapper;
+    private ITSettleAccountMapper settleAccountMapper;
+    @Autowired
+    private WholesaleOrderService wholesaleOrderService;
     private static int count = -1;
 
     @Override
@@ -73,6 +76,14 @@ public class OrderServiceImpl implements OrderService {
             if(StringUtils.isEmpty(token.getMerchantId())){
                 return ApiResponse.fail(ApiEnum.NOT_MERCHANT);
             }
+            //检查用户是否为系统用户
+            TUser userParam = new TUser();
+            userParam.setOpenId(openid);
+            userParam.setMenchantId(token.getMerchantId());
+            TUser user = userMapper.selectByWhere(userParam);
+            if(user == null){
+                return ApiResponse.fail(ApiEnum.TOKEN_ERROR);
+            }
             //获取vip价格
             TVipPrice vipPriceParam = new TVipPrice();
             vipPriceParam.setVipType(vipType);
@@ -85,7 +96,7 @@ public class OrderServiceImpl implements OrderService {
             order.setAppid(Configure.getAppID());
             order.setMch_id(Configure.getMch_id());
             order.setNonce_str(RandomStringGenerator.getRandomStringByLength(32));
-            order.setBody("影视会员VIP年卡" + vipPrice.getVipType());
+            order.setBody("影视会员VIP" + vipPrice.getVipType());
             order.setOut_trade_no(RandomStringGenerator.getRandomStringByLength(20));
             order.setTotal_fee(vipPrice.getVipPrice().multiply(BigDecimal.valueOf(100)).setScale(0));
             order.setSpbill_create_ip(Configure.getSpbill_create_ip());
@@ -159,6 +170,9 @@ public class OrderServiceImpl implements OrderService {
             orderMapper.updateByPrimaryKeySelective(update);
             return true;
         }
+        if(wholesaleOrderService.successOrder(param)){
+            return true;
+        }
         return false;
     }
 
@@ -173,7 +187,9 @@ public class OrderServiceImpl implements OrderService {
             update.setId(orderResult.getId());
             update.setOrderState(2);
             orderMapper.updateByPrimaryKeySelective(update);
+            return;
         }
+        wholesaleOrderService.unSuccessOrder(order);
     }
 
     public void updateOrder(String orderCode, String prepayId) {
