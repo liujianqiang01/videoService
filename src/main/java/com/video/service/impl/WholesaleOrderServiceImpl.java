@@ -1,6 +1,8 @@
 package com.video.service.impl;
 
 import com.alibaba.druid.util.StringUtils;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.thoughtworks.xstream.XStream;
 import com.video.common.Configure;
@@ -101,6 +103,7 @@ public class WholesaleOrderServiceImpl implements WholesaleOrderService {
             }
         }catch (Exception e){
             log.error("批发异常",e);
+            return ApiResponse.fail(ApiEnum.SUB_ORDER_ERROR);
         }
         return ApiResponse.success(json.toJSONString());
     }
@@ -125,11 +128,13 @@ public class WholesaleOrderServiceImpl implements WholesaleOrderService {
     }
 
     private int addOrder(OrderInfo order,String merchantId,Map<String, Object> countPrice){
+        List<TWholesaleOrder> priceList = (List<TWholesaleOrder>)countPrice.get("list");
+        JSONArray array= JSONArray.parseArray(JSON.toJSONString(priceList));
         TWholesaleOrder wholesaleOrder = new TWholesaleOrder();
         wholesaleOrder.setMerchantId(merchantId);
         wholesaleOrder.setOpenId(order.getOpenid());
         wholesaleOrder.setOrderCode(order.getOut_trade_no());
-        wholesaleOrder.setOrderDesc(countPrice.get("list").toString());
+        wholesaleOrder.setOrderDesc(array.toJSONString());
         wholesaleOrder.setOrderPrice(order.getTotal_fee());
         wholesaleOrder.setOrderState(1);
         wholesaleOrder.setCreateTime(new Date());
@@ -173,8 +178,10 @@ public class WholesaleOrderServiceImpl implements WholesaleOrderService {
             update.setOrderState(3);
             update.setThirdOrderCode(param.getTransaction_id());
             wholesaleOrderMapper.updateByPrimaryKeySelective(update);
+            wholesalePriceService.handOut(orderResult);
             return true;
         }
         return false;
     }
+
 }

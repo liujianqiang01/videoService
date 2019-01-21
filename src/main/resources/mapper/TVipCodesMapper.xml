@@ -108,4 +108,18 @@
     where vip_type = #{vipType,jdbcType=INTEGER} and  merchant_id = #{merchantId,jdbcType=VARCHAR}
     and vip_state = 1
   </select>
+
+  <!--根据主键Id修改-->
+  <update id="updateMerchantByPrimaryKey">
+    update t_vip_codes
+    <set >
+      <if test="merchantId != null" >
+        merchant_id = #{merchantId,jdbcType=VARCHAR}
+      </if>
+    </set>
+    where id in
+    <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </update>
 </mapper>

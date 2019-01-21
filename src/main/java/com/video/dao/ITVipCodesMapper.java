@@ -42,4 +42,6 @@ public interface ITVipCodesMapper {
      *条件查询
      */
     int countByWhere(TVipCodes record);
+
+    int updateMerchantByPrimaryKey(String merchantId,List<Integer> list);
 }

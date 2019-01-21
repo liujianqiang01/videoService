@@ -1,11 +1,18 @@
 package com.video.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.video.dao.ITVipCodesMapper;
 import com.video.dao.ITWholesalePriceMapper;
 import com.video.model.TVipCodes;
+import com.video.model.TWholesaleOrder;
 import com.video.model.TWholesalePrice;
 import com.video.model.ao.WholesaleAo;
 import com.video.service.WholesalePriceService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
@@ -21,6 +28,7 @@ import java.util.Map;
  */
 @Service
 public class WholesalePriceServiceImpl implements WholesalePriceService {
+    private static Logger log = LoggerFactory.getLogger(WholesalePriceServiceImpl.class);
 
     @Autowired
     private ITWholesalePriceMapper wholesalePriceMapper;
@@ -55,6 +63,7 @@ public class WholesalePriceServiceImpl implements WholesalePriceService {
             TVipCodes codes = new TVipCodes();
             codes.setVipType(vipType);
             codes.setMerchantId("Admin");
+            codes.setVipState(1);
             String vipName = "年卡";
             if(vipType == 1){
                 vipName = "月卡";
@@ -62,7 +71,7 @@ public class WholesalePriceServiceImpl implements WholesalePriceService {
                 vipName = "季卡";
             }
             int stock = vipCodesMapper.countByWhere(codes);
-            if(1 < stock) {
+            if(number+100 < stock) {
                 List<TWholesalePrice> tWholesalePrices = wholesalePriceMapper.selectBetween(vipType, number);
                 if(tWholesalePrices != null && tWholesalePrices.size()>0){
                     BigDecimal vipPrice = tWholesalePrices.get(0).getVipPrice();
@@ -74,6 +83,47 @@ public class WholesalePriceServiceImpl implements WholesalePriceService {
                         ao.setVipName(vipName);
                         ao.setTotalPrice(vipPrice.multiply(BigDecimal.valueOf(number)));
                         list.add(ao);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * 分发
+     */
+    public void handOut(TWholesaleOrder order){
+        JSONArray array= JSONArray.parseArray(order.getOrderDesc());
+        for(int i = 0; i<array.size(); i++){
+            Integer vipType = array.getJSONObject(i).getInteger("vipType");
+            Integer number = array.getJSONObject(i).getInteger("number");
+            //检查后台激活码是否足够
+            TVipCodes codes = new TVipCodes();
+            codes.setVipType(vipType);
+            codes.setMerchantId("Admin");
+            codes.setVipState(1);
+            int stock = vipCodesMapper.countByWhere(codes);
+            if(number+100 < stock) {
+                //每一百次一提交
+                int a = number;
+                int b = 100;
+                int size = (a/b)+1;
+                PageInfo<TVipCodes> orderPageInfo ;
+                for(int j = 0; j < size; j++) {
+                    List<Integer> ids = new ArrayList<>();
+                    try {
+                        if (a > b) {
+                            orderPageInfo = PageHelper.startPage(0, b).setOrderBy("id desc").doSelectPageInfo(() -> vipCodesMapper.selectListByWhere(codes));
+                        } else {
+                            orderPageInfo = PageHelper.startPage(0, a).setOrderBy("id desc").doSelectPageInfo(() -> vipCodesMapper.selectListByWhere(codes));
+                        }
+                        //组装id
+                        for (TVipCodes v : orderPageInfo.getList()) {
+                            ids.add(v.getId());
+                        }
+                        vipCodesMapper.updateMerchantByPrimaryKey(order.getMerchantId(), ids);
+                    }catch (Exception e){
+                        log.error("采购单次失败 merchant = "+order.getMerchantId() + "idSize = "+ids.size(),e);
                     }
                 }
             }

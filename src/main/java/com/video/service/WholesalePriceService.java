@@ -1,6 +1,8 @@
 package com.video.service;
 
 
+import com.video.model.TWholesaleOrder;
+
 import java.util.Map;
 
 /**
@@ -11,4 +13,6 @@ import java.util.Map;
 public interface WholesalePriceService {
 
     Map<String,Object> getCountPrice(String[] numbers);
+
+    void handOut(TWholesaleOrder order);
 }
