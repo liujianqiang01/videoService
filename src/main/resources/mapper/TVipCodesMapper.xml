@@ -99,4 +99,13 @@
     <include refid="Base_Column_List" />
     from t_vip_codes where vip_type = #{vipType} and vip_state = #{vipState} and merchant_id = #{merchantId} limit #{limit} , 1
   </select>
+
+
+  <!--统计-->
+  <select id="countByWhere" resultType="java.lang.Integer" parameterType="com.video.model.TVipCodes" >
+    select count(1)
+    from t_vip_codes
+    where vip_type = #{vipType,jdbcType=INTEGER} and  merchant_id = #{merchantId,jdbcType=VARCHAR}
+    and vip_state = 1
+  </select>
 </mapper>

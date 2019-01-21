@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.video.dao.ITWholesalePriceMapper" >
+  <resultMap id="BaseResultMap" type="com.video.model.TWholesalePrice" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="vip_type" property="vipType" jdbcType="INTEGER" />
+    <result column="vip_price" property="vipPrice" jdbcType="DECIMAL" />
+    <result column="vip_count_start" property="vipCountStart" jdbcType="INTEGER" />
+    <result column="vip_count_end" property="vipCountEnd" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, vip_type, vip_price, vip_count_start, vip_count_end
+  </sql>
+  
+	<!--批量添加-->
+  <insert id="insertBatch" parameterType="java.util.List" >
+    insert into t_wholesale_price (id, 
+      vip_type, vip_price, vip_count_start, vip_count_end)
+    values
+		<foreach collection="list" item="item" separator=",">
+			(
+			#{item.id}, 
+      #{item.vipType}, #{item.vipPrice}, #{item.vipCountStart}, #{item.vipCountEnd})
+		</foreach>
+  </insert>
+  
+	<!--根据主键Id删除-->
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_wholesale_price
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  
+	<!--根据主键Id查询-->
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_wholesale_price
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+	<!--根据主键Id修改-->
+  <update id="updateByPrimaryKeySelective" parameterType="com.video.model.TWholesalePrice" >
+    update t_wholesale_price
+    <set >
+      <if test="vipType != null" >
+        vip_type = #{vipType,jdbcType=INTEGER},
+      </if>
+      <if test="vipPrice != null" >
+        vip_price = #{vipPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="vipCountStart != null" >
+        vip_count_start = #{vipCountStart,jdbcType=INTEGER},
+      </if>
+      <if test="vipCountEnd != null" >
+        vip_count_end = #{vipCountEnd,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+	<!--根据类属性查询集合-->
+  <select id="selectListByClassElement" resultMap="BaseResultMap" parameterType="com.video.model.TWholesalePrice" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_wholesale_price
+    <where >
+      <if test="vipType != null" >
+        and vip_type = #{vipType,jdbcType=INTEGER}
+      </if>
+      <if test="vipPrice != null" >
+        and vip_price = #{vipPrice,jdbcType=DECIMAL}
+      </if>
+      <if test="vipCountStart != null" >
+        and vip_count_start = #{vipCountStart,jdbcType=INTEGER}
+      </if>
+      <if test="vipCountEnd != null" >
+        and vip_count_end = #{vipCountEnd,jdbcType=INTEGER}
+      </if>
+    </where>
+  </select>
+  
+	<!--根据类属性查询-->
+  <select id="selectByClassElement" resultMap="BaseResultMap" parameterType="com.video.model.TWholesalePrice" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_wholesale_price
+    <where >
+      <if test="vipType != null" >
+        and vip_type = #{vipType,jdbcType=INTEGER}
+      </if>
+      <if test="vipPrice != null" >
+        and vip_price = #{vipPrice,jdbcType=DECIMAL}
+      </if>
+      <if test="vipCountStart != null" >
+        and vip_count_start = #{vipCountStart,jdbcType=INTEGER}
+      </if>
+      <if test="vipCountEnd != null" >
+        and vip_count_end = #{vipCountEnd,jdbcType=INTEGER}
+      </if>
+    </where>
+  </select>
+
+
+  <!--根据类属性查询集合-->
+  <select id="selectBetween" resultMap="BaseResultMap" parameterType="com.video.model.TWholesalePrice" >
+    select
+    <include refid="Base_Column_List" />
+    from t_wholesale_price where vip_type = #{vipType} and vip_count_start  &lt;=  #{number}  and vip_count_end   &gt;  #{number}
+  </select>
+
+</mapper>

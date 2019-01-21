@@ -37,4 +37,9 @@ public interface ITVipCodesMapper {
     TVipCodes selectByWhere(TVipCodes record);
 
     TVipCodes selectOneByWhere(@Param("vipType") Integer vipType, @Param("vipState")Integer vipState, @Param("limit")int limit,@Param("merchantId")String merchantId);
+
+    /**
+     *条件查询
+     */
+    int countByWhere(TVipCodes record);
 }

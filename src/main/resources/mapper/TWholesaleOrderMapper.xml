@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.video.dao.ITWholesaleOrderMapper" >
+  <resultMap id="BaseResultMap" type="com.video.model.TWholesaleOrder" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="order_code" property="orderCode" jdbcType="VARCHAR" />
+    <result column="order_price" property="orderPrice" jdbcType="DECIMAL" />
+    <result column="order_desc" property="orderDesc" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="order_state" property="orderState" jdbcType="INTEGER" />
+    <result column="open_id" property="openId" jdbcType="VARCHAR" />
+    <result column="merchant_id" property="merchantId" jdbcType="VARCHAR" />
+    <result column="third_order_code" property="thirdOrderCode" jdbcType="VARCHAR" />
+    <result column="prepay_id" property="prepayId" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, order_code, order_price, order_desc, create_time, order_state, open_id, merchant_id, 
+    third_order_code, prepay_id
+  </sql>
+  
+	<!--批量添加-->
+  <insert id="insertBatch" parameterType="java.util.List" >
+    insert into t_wholesale_order (id, 
+      order_code, order_price, order_desc, create_time, order_state, 
+      open_id, merchant_id, third_order_code, prepay_id)
+    values
+		<foreach collection="list" item="item" separator=",">
+			(
+			#{item.id}, 
+      #{item.orderCode}, #{item.orderPrice}, #{item.orderDesc}, #{item.createTime}, #{item.orderState}, 
+      #{item.openId}, #{item.merchantId}, #{item.thirdOrderCode}, #{item.prepayId})
+		</foreach>
+  </insert>
+  
+	<!--根据主键Id删除-->
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_wholesale_order
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  
+	<!--根据主键Id查询-->
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_wholesale_order
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+	<!--根据主键Id修改-->
+  <update id="updateByPrimaryKeySelective" parameterType="com.video.model.TWholesaleOrder" >
+    update t_wholesale_order
+    <set >
+      <if test="orderCode != null" >
+        order_code = #{orderCode,jdbcType=VARCHAR},
+      </if>
+      <if test="orderPrice != null" >
+        order_price = #{orderPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="orderDesc != null" >
+        order_desc = #{orderDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orderState != null" >
+        order_state = #{orderState,jdbcType=INTEGER},
+      </if>
+      <if test="openId != null" >
+        open_id = #{openId,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantId != null" >
+        merchant_id = #{merchantId,jdbcType=VARCHAR},
+      </if>
+      <if test="thirdOrderCode != null" >
+        third_order_code = #{thirdOrderCode,jdbcType=VARCHAR},
+      </if>
+      <if test="prepayId != null" >
+        prepay_id = #{prepayId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+	<!--根据类属性查询集合-->
+  <select id="selectListByClassElement" resultMap="BaseResultMap" parameterType="com.video.model.TWholesaleOrder" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_wholesale_order
+    <where >
+      <if test="orderCode != null" >
+        and order_code = #{orderCode,jdbcType=VARCHAR}
+      </if>
+      <if test="orderPrice != null" >
+        and order_price = #{orderPrice,jdbcType=DECIMAL}
+      </if>
+      <if test="orderDesc != null" >
+        and order_desc = #{orderDesc,jdbcType=VARCHAR}
+      </if>
+      <if test="createTime != null" >
+        and create_time = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="orderState != null" >
+        and order_state = #{orderState,jdbcType=INTEGER}
+      </if>
+      <if test="openId != null" >
+        and open_id = #{openId,jdbcType=VARCHAR}
+      </if>
+      <if test="merchantId != null" >
+        and merchant_id = #{merchantId,jdbcType=VARCHAR}
+      </if>
+      <if test="thirdOrderCode != null" >
+        and third_order_code = #{thirdOrderCode,jdbcType=VARCHAR}
+      </if>
+      <if test="prepayId != null" >
+        and prepay_id = #{prepayId,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+  
+	<!--根据类属性查询-->
+  <select id="selectByClassElement" resultMap="BaseResultMap" parameterType="com.video.model.TWholesaleOrder" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_wholesale_order
+    <where >
+      <if test="orderCode != null" >
+        and order_code = #{orderCode,jdbcType=VARCHAR}
+      </if>
+      <if test="orderPrice != null" >
+        and order_price = #{orderPrice,jdbcType=DECIMAL}
+      </if>
+      <if test="orderDesc != null" >
+        and order_desc = #{orderDesc,jdbcType=VARCHAR}
+      </if>
+      <if test="createTime != null" >
+        and create_time = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="orderState != null" >
+        and order_state = #{orderState,jdbcType=INTEGER}
+      </if>
+      <if test="openId != null" >
+        and open_id = #{openId,jdbcType=VARCHAR}
+      </if>
+      <if test="merchantId != null" >
+        and merchant_id = #{merchantId,jdbcType=VARCHAR}
+      </if>
+      <if test="thirdOrderCode != null" >
+        and third_order_code = #{thirdOrderCode,jdbcType=VARCHAR}
+      </if>
+      <if test="prepayId != null" >
+        and prepay_id = #{prepayId,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+</mapper>
