@@ -105,8 +105,17 @@
   <select id="countByWhere" resultType="java.lang.Integer" parameterType="com.video.model.TVipCodes" >
     select count(1)
     from t_vip_codes
-    where vip_type = #{vipType,jdbcType=INTEGER} and  merchant_id = #{merchantId,jdbcType=VARCHAR}
-    and vip_state = 1
+    <where >
+    <if test="vipType != null" >
+      and vip_type = #{vipType,jdbcType=INTEGER}
+    </if>
+    <if test="merchantId != null" >
+      and merchant_id = #{merchantId}
+    </if>
+    <if test="vipState != null" >
+      and vip_state = #{vipState,jdbcType=INTEGER}
+    </if>
+    </where>
   </select>
 
   <!--根据主键Id修改-->

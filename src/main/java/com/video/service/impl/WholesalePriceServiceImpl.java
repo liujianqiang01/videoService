@@ -1,16 +1,20 @@
 package com.video.service.impl;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.video.dao.ITOrderMapper;
 import com.video.dao.ITVipCodesMapper;
+import com.video.dao.ITWholesaleOrderMapper;
 import com.video.dao.ITWholesalePriceMapper;
+import com.video.model.TOrder;
 import com.video.model.TVipCodes;
 import com.video.model.TWholesaleOrder;
 import com.video.model.TWholesalePrice;
 import com.video.model.ao.WholesaleAo;
 import com.video.service.WholesalePriceService;
+import com.video.util.TokenBean;
+import com.video.util.TokenUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +38,10 @@ public class WholesalePriceServiceImpl implements WholesalePriceService {
     private ITWholesalePriceMapper wholesalePriceMapper;
     @Autowired
     private ITVipCodesMapper vipCodesMapper;
+    @Autowired
+    private ITOrderMapper orderMapper;
+    @Autowired
+    private ITWholesaleOrderMapper wholesaleOrderMapper;
 
     @Override
     public Map<String,Object> getCountPrice(String[] numbers) {
@@ -128,5 +136,61 @@ public class WholesalePriceServiceImpl implements WholesalePriceService {
                 }
             }
         }
+    }
+
+    @Override
+    public void countOrder( Map<String,Object> countPrice){
+        TokenBean tokenBean = TokenUtil.getToken();
+        Integer[] totalNumber ={0,0,0};//卡总数
+        Integer[] saleNumber ={0,0,0};//卖出卡总数
+        Integer[] surplusNumber ={0,0,0};//剩余卡总数
+        Double[]  wholesalePrice ={0.0,0.0,0.0};//批发总价
+        Double[]  salePrice ={0.0,0.0,0.0};//销售总价
+            //统计VIP数量
+            TWholesaleOrder wholesaleOrder = new TWholesaleOrder();
+            wholesaleOrder.setMerchantId(tokenBean.getMerchantId());
+            List<TWholesaleOrder> tWholesaleOrders = wholesaleOrderMapper.selectListByClassElement(wholesaleOrder);
+            for(TWholesaleOrder o: tWholesaleOrders){
+                JSONArray array= JSONArray.parseArray(o.getOrderDesc());
+                for(int j =0 ; j< array.size(); j++){
+                    Integer vipType = array.getJSONObject(j).getInteger("vipType");
+                    BigDecimal price = array.getJSONObject(j).getBigDecimal("totalPrice");
+                    wholesalePrice[vipType -1] += price.doubleValue();
+                }
+            }
+
+            for(int i = 0 ;i< 3 ; i++ ){
+                TVipCodes codes = new TVipCodes();
+                codes.setMerchantId(tokenBean.getMerchantId());
+                codes.setVipType(i+1);
+                int tatal  = vipCodesMapper.countByWhere(codes);
+                totalNumber[i] = tatal;
+                codes.setVipState(0);
+                int sale  = vipCodesMapper.countByWhere(codes);
+                saleNumber[i] = sale;
+                int surplus = tatal - sale;
+                surplusNumber[i] = surplus;
+            }
+
+            for(int i = 0 ;i< 3 ; i++ ){
+                TOrder order = new TOrder();
+                order.setVipState(0);
+                order.setMerchantId(tokenBean.getMerchantId());
+                order.setOrderState(3);
+                BigDecimal sale = orderMapper.countByMerchant(order);
+                salePrice[i] = sale.doubleValue();
+            }
+        countPrice.put("totalNumber",totalNumber);
+        countPrice.put("saleNumber",saleNumber);
+        countPrice.put("surplusNumber",surplusNumber);
+        countPrice.put("wholesalePrice",wholesalePrice);
+        countPrice.put("salePrice",salePrice);
+    }
+
+    public static void main(String[] args) {
+        Double[]  wholesalePrice ={0.0,0.0,0.0};//批发总价
+        System.out.println(wholesalePrice[0]);
+        wholesalePrice[0] += 3;
+        System.out.println(wholesalePrice[0]);
     }
 }

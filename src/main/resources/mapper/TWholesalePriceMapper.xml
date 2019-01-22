@@ -105,7 +105,7 @@
   <select id="selectBetween" resultMap="BaseResultMap" parameterType="com.video.model.TWholesalePrice" >
     select
     <include refid="Base_Column_List" />
-    from t_wholesale_price where vip_type = #{vipType} and vip_count_start  &lt;=  #{number}  and vip_count_end   &gt;  #{number}
+    from t_wholesale_price where vip_type = #{vipType} and vip_count_start  &lt;=  #{number}  and vip_count_end   &gt;  #{number} and state =1
   </select>
 
 </mapper>

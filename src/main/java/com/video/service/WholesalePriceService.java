@@ -15,4 +15,6 @@ public interface WholesalePriceService {
     Map<String,Object> getCountPrice(String[] numbers);
 
     void handOut(TWholesaleOrder order);
+
+    void countOrder( Map<String,Object> countPrice);
 }

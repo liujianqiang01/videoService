@@ -54,5 +54,8 @@ public interface ITOrderMapper {
      */
     List<TOrder> selectJojnListByWhere(TOrder record);
 
-
+    /**
+     *统计商户订单
+     */
+    BigDecimal countByMerchant(TOrder record);
 }
