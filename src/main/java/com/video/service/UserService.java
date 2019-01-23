@@ -17,5 +17,6 @@ public interface UserService {
     void updateUserInfo(TokenBean tokenBean);
     List<TUser> getTuser(String openId);
     List<TUser> findUser(TUser user);
+    int apply(String reason);
 
 }

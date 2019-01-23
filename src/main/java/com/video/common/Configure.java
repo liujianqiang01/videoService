@@ -12,12 +12,22 @@ public class Configure {
 
 	private static String spbill_create_ip = "192.168.1.100";
 
+	private static String payResult="https://www.filmunion.com.cn/video/payNotify/payResult";
+
 	public static String getSecret() {
 		return secret;
 	}
 
 	public static void setSecret(String secret) {
 		Configure.secret = secret;
+	}
+
+	public static String getPayResult() {
+		return payResult;
+	}
+
+	public static void setPayResult(String payResult) {
+		Configure.payResult = payResult;
 	}
 
 	public static String getKey() {

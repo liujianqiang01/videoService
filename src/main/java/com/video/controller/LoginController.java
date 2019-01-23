@@ -149,4 +149,15 @@ public class LoginController {
         return ApiResponse.success(token);
     }
 
+    /**
+     * 申请代理
+     * @return
+     */
+    @PostMapping("/apply")
+    @ResponseBody
+    public ApiResponse apply(String reason) {
+        log.info("申请理由："+reason);
+        userService.apply(reason);
+        return ApiResponse.success();
+    }
 }

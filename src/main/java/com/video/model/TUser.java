@@ -35,6 +35,8 @@ public class TUser implements Serializable {
 
     //用户头像
     private String avatarUrl;
+    private  Integer applyState;
+    private String applyReason;
 
     private static final long serialVersionUID = 1L;
 
@@ -122,8 +124,24 @@ public class TUser implements Serializable {
         return avatarUrl;
     }
 
+    public Integer getApplyState() {
+        return applyState;
+    }
+
+    public void setApplyState(Integer applyState) {
+        this.applyState = applyState;
+    }
+
     public void setAvatarUrl(String avatarUrl) {
         this.avatarUrl = avatarUrl;
+    }
+
+    public String getApplyReason() {
+        return applyReason;
+    }
+
+    public void setApplyReason(String applyReason) {
+        this.applyReason = applyReason;
     }
 
     @Override

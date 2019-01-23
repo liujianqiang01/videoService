@@ -4,7 +4,7 @@
   <sql id="Base_Column_List" >
     user_id as userId, phone, open_id as openId, nick_name as nickName, user_type as userType,
     menchant_id as menchantId, gender, province, city,
-    country,avatar_url as avatarUrl
+    country,avatar_url as avatarUrl,apply_state as applyState, apply_reason as applyReason
   </sql>
   
 	<!--批量添加-->
@@ -68,6 +68,12 @@
       </if>
       <if test="avatarUrl != null" >
         avatar_url = #{avatarUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="applyState != null" >
+        apply_state = #{applyState,jdbcType=INTEGER},
+      </if>
+      <if test="applyReason != null" >
+        apply_reason = #{applyReason,jdbcType=INTEGER},
       </if>
     </set>
     where user_id = #{userId,jdbcType=INTEGER}

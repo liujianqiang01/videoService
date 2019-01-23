@@ -7,6 +7,7 @@ import com.video.model.TMerchant;
 import com.video.model.TUser;
 import com.video.service.UserService;
 import com.video.util.TokenBean;
+import com.video.util.TokenUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -108,4 +109,25 @@ public class UserServiceImpl implements UserService {
     public List<TUser> findUser(TUser user) {
         return userMapper.selectListByWhere(user);
     }
+
+    @Override
+    public int apply(String reason) {
+        TokenBean tokenBean = TokenUtil.getToken();
+        tokenBean.getOpenId();
+        //检查是否存在商户信息
+        TUser param = new TUser();
+        param.setOpenId(tokenBean.getOpenId());
+        List<TUser> result = userMapper.selectListByWhere(param);
+        if(result.size()<2){
+            TUser user = result.get(0);
+            if(user.getUserType() != 1) {
+                user.setApplyState(1);
+                user.setApplyReason(reason);
+                userMapper.updateByPrimaryKeySelective(user);
+            }
+           return 1;
+        }
+        return 0;
+    }
+
 }
