@@ -1,6 +1,5 @@
 package com.video.service.impl;
 
-import com.alibaba.druid.util.StringUtils;
 import com.video.dao.ITMerchantMapper;
 import com.video.dao.ITUserMapper;
 import com.video.model.TMerchant;
@@ -8,13 +7,11 @@ import com.video.model.TUser;
 import com.video.service.UserService;
 import com.video.util.TokenBean;
 import com.video.util.TokenUtil;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**

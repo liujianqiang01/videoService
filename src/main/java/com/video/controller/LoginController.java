@@ -153,6 +153,17 @@ public class LoginController {
      * 申请代理
      * @return
      */
+    @PostMapping("/util")
+    @ResponseBody
+    public ApiResponse util(String reason) {
+        HeaderInfo headerInfo = new HeaderInfo();
+        return ApiResponse.success(headerInfo);
+    }
+
+    /**
+     * 申请代理
+     * @return
+     */
     @PostMapping("/apply")
     @ResponseBody
     public ApiResponse apply(String reason) {
