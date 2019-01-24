@@ -180,7 +180,10 @@ public class WholesalePriceServiceImpl implements WholesalePriceService {
                 order.setMerchantId(tokenBean.getMerchantId());
                 order.setOrderState(3);
                 BigDecimal sale = orderMapper.countByMerchant(order);
-                salePrice[i] = sale.doubleValue();
+                if(sale != null){
+                    salePrice[i] = sale.doubleValue();
+                }
+
             }
         countPrice.put("totalNumber",totalNumber);
         countPrice.put("saleNumber",saleNumber);
