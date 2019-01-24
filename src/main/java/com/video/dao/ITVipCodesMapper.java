@@ -43,5 +43,5 @@ public interface ITVipCodesMapper {
      */
     int countByWhere(TVipCodes record);
 
-    int updateMerchantByPrimaryKey(String merchantId,List<Integer> list);
+    int updateMerchantByPrimaryKey(@Param("vipCodes")TVipCodes vipCodes,@Param("list") List<Integer> list);
 }

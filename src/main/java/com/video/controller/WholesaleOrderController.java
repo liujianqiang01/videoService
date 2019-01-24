@@ -75,7 +75,9 @@ public class WholesaleOrderController {
         }
         List<String[]> listStr = new ArrayList<>();
         String[] strArray;
+        List<Integer> ids = new ArrayList<>();
         for(TVipCodes codes : list){
+            ids.add(codes.getId());
             strArray = new String[1];
             strArray[0] = codes.getVipCode();
             listStr.add(strArray);
@@ -89,6 +91,9 @@ public class WholesaleOrderController {
         String[] titles ={title};
         String fileName = String.valueOf(System.currentTimeMillis());
         ExcelUtil.generateExcel(response,fileName,titles,listStr);
+        TVipCodes update = new TVipCodes();
+        update.setVipState(0);
+        vipCodesService.updateMerchantByPrimaryKey(update,ids);
         log.info("====>会员卡导出成功 ！");
         return ApiResponse.success();
     }

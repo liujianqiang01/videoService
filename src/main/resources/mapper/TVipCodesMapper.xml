@@ -125,8 +125,11 @@
   <update id="updateMerchantByPrimaryKey">
     update t_vip_codes
     <set >
-      <if test="merchantId != null" >
-        merchant_id = #{merchantId,jdbcType=VARCHAR}
+      <if test="vipCodes.merchantId != null" >
+        merchant_id = #{vipCodes.merchantId,jdbcType=VARCHAR}
+      </if>
+      <if test="vipCodes.vipState != null" >
+         vip_state = #{vipCodes.vipState,jdbcType=INTEGER}
       </if>
     </set>
     where id in

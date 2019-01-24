@@ -129,7 +129,9 @@ public class WholesalePriceServiceImpl implements WholesalePriceService {
                         for (TVipCodes v : orderPageInfo.getList()) {
                             ids.add(v.getId());
                         }
-                        vipCodesMapper.updateMerchantByPrimaryKey(order.getMerchantId(), ids);
+                        TVipCodes codesParam = new TVipCodes();
+                        codesParam.setMerchantId(order.getMerchantId());
+                        vipCodesMapper.updateMerchantByPrimaryKey(codesParam, ids);
                     }catch (Exception e){
                         log.error("采购单次失败 merchant = "+order.getMerchantId() + "idSize = "+ids.size(),e);
                     }

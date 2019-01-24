@@ -46,4 +46,12 @@ public interface VipCodesService {
 
     PageInfo<TVipCodes> findPage(Integer pageNum, Integer pageSize ,TVipCodes vipCodes );
 
+    /**
+     * 批发
+     * @param vipCodes
+     * @param list
+     * @return
+     */
+    int updateMerchantByPrimaryKey(TVipCodes vipCodes,List<Integer> list);
+
 }

@@ -56,5 +56,10 @@ public class VipCodesServiceImpl implements VipCodesService {
         return orderPageInfo;
     }
 
+    @Override
+    public int updateMerchantByPrimaryKey(TVipCodes vipCodes, List<Integer> list) {
+        return vipCodesMapper.updateMerchantByPrimaryKey(vipCodes,list);
+    }
+
 
 }
