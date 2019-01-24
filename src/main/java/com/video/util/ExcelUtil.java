@@ -17,18 +17,17 @@ import java.util.List;
  */
 public class ExcelUtil {
 
-    public static void generateExcel(HttpServletResponse response, String fileName) throws IOException {
+    public static void generateExcel(HttpServletResponse response, String fileName,String[]  title,  List<String[]> listStr) throws IOException {
         //创建工作薄
         XSSFWorkbook workbook = new XSSFWorkbook();
         //创建表单
-        XSSFSheet sheet = genSheet(workbook, "testExcel");
+        XSSFSheet sheet = genSheet(workbook, title[0]);
         //创建表单样式
         XSSFCellStyle titleStyle = genTitleStyle(workbook);//创建标题样式
         XSSFCellStyle contextStyle = genContextStyle(workbook);//创建文本样式
 
         //创建Excel
-        genExcel(sheet, titleStyle, contextStyle);
-
+        genExcel(sheet, titleStyle, contextStyle,title,listStr);
 
         //准备将Excel的输出流通过response输出到页面下载
         //八进制输出流
@@ -45,9 +44,7 @@ public class ExcelUtil {
         //文本文件输出流，释放资源
     }
 
-    public static void genExcel(XSSFSheet sheet,XSSFCellStyle titleStyle,XSSFCellStyle contextStyle) {
-
-
+    public static void genExcel(XSSFSheet sheet,XSSFCellStyle titleStyle,XSSFCellStyle contextStyle,String[] title,  List<String[]> listStr) {
         //设置标题位置
         sheet.addMergedRegion(new CellRangeAddress(
                 0, //first row
@@ -59,12 +56,12 @@ public class ExcelUtil {
         XSSFRow row = sheet.createRow(0);//创建第一行，为标题，index从0开始
         XSSFCell cell;
         cell = row.createCell(0);//创建一列
-        cell.setCellValue("月卡");//标题
+        cell.setCellValue("会员卡");//标题
         cell.setCellStyle(titleStyle);//设置标题样式
         row = sheet.createRow(1);//创建副标题
-        for(int i = 0; i<3;i++) {
+        for(int i = 0; i<title.length ;i++) {
             cell = row.createCell(i);//创建列
-            cell.setCellValue("姓名");//
+            cell.setCellValue(title[i]);//
             cell.setCellStyle(contextStyle);//设置样式
         }
 
@@ -78,11 +75,12 @@ public class ExcelUtil {
 			}
 		*/
         //从数据库取数据填充到Excel，这步省略，添加模拟数据
-        for(int i = 2 ; i<15;i++){//i从2开始计数，因为上面已经创建了 0 1行
-            row = sheet.createRow(i);//创建行
-            for(int j = 0; j<3;j++) {
+        for(int i = 0 ; i<listStr.size();i++){//i从2开始计数，因为上面已经创建了 0 1行
+            row = sheet.createRow(i+2);//创建行
+            String[] strings = listStr.get(i);
+            for(int j = 0; j<strings.length;j++) {
                 cell = row.createCell(j);//创建列
-                cell.setCellValue("姓名");//
+                cell.setCellValue(strings[j]);//
                 cell.setCellStyle(contextStyle);//设置样式
             }
             }

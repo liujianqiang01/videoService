@@ -1,5 +1,7 @@
 package com.video.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.video.dao.ITVipCodesMapper;
 import com.video.model.TVipCodes;
 import com.video.service.VipCodesService;
@@ -47,4 +49,12 @@ public class VipCodesServiceImpl implements VipCodesService {
     public TVipCodes selectByWhere(TVipCodes record) {
         return vipCodesMapper.selectByWhere(record);
     }
+
+    @Override
+    public PageInfo<TVipCodes> findPage(Integer pageNum, Integer pageSize ,TVipCodes vipCodes ) {
+        PageInfo<TVipCodes> orderPageInfo = PageHelper.startPage(pageNum, pageSize).setOrderBy("id desc").doSelectPageInfo(() -> vipCodesMapper.selectListByWhere(vipCodes));
+        return orderPageInfo;
+    }
+
+
 }

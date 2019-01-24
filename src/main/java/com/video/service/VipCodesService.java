@@ -1,6 +1,10 @@
 package com.video.service;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.video.model.TOrder;
 import com.video.model.TVipCodes;
+import org.omg.CORBA.INTERNAL;
 
 import java.util.List;
 
@@ -39,4 +43,7 @@ public interface VipCodesService {
      *条件查询
      */
     TVipCodes selectByWhere(TVipCodes record);
+
+    PageInfo<TVipCodes> findPage(Integer pageNum, Integer pageSize ,TVipCodes vipCodes );
+
 }
