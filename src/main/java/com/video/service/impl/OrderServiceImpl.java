@@ -55,6 +55,8 @@ public class OrderServiceImpl implements OrderService {
     private ITSettleAccountMapper settleAccountMapper;
     @Autowired
     private WholesaleOrderService wholesaleOrderService;
+    @Autowired
+    private ITMerchantPriceMapper merchantPriceMapper;
     private static int count = -1;
 
     @Override
@@ -80,7 +82,7 @@ public class OrderServiceImpl implements OrderService {
             TUser userParam = new TUser();
             userParam.setOpenId(openid);
             userParam.setMenchantId(token.getMerchantId());
-            TUser user = userMapper.selectByWhere(userParam);
+            List<TUser> user = userMapper.selectListByWhere(userParam);
             if(user == null){
                 return ApiResponse.fail(ApiEnum.TOKEN_ERROR);
             }
@@ -88,6 +90,24 @@ public class OrderServiceImpl implements OrderService {
             TVipPrice vipPriceParam = new TVipPrice();
             vipPriceParam.setVipType(vipType);
             TVipPrice vipPrice = vipPriceMapper.selectByWhere(vipPriceParam);
+            //校验商户是否有自己的价格
+            TMerchantPrice priceParam = new TMerchantPrice();
+            priceParam.setState(1);
+            priceParam.setMerchanId(token.getMerchantId());
+            TMerchantPrice merchantPrice = merchantPriceMapper.selectByClassElement(priceParam);
+            if(vipType == 1){
+                if(merchantPrice.getMonthCardPrice().compareTo(BigDecimal.ZERO) > 0 ){
+                    vipPrice.setVipPrice(merchantPrice.getMonthCardPrice());
+                }
+            }else  if(vipType == 2){
+                if(merchantPrice.getSeasonCardPrice().compareTo(BigDecimal.ZERO) >  0){
+                    vipPrice.setVipPrice(merchantPrice.getSeasonCardPrice());
+                }
+            }else  if(vipType == 3){
+                if(merchantPrice.getYearCardPrice().compareTo(BigDecimal.ZERO) > 0){
+                    vipPrice.setVipPrice(merchantPrice.getYearCardPrice());
+                }
+            }
             if (vipPrice == null) {
                 log.error("未能获取到对应的vip！");
                 return ApiResponse.fail(ApiEnum.VIP_NULL);

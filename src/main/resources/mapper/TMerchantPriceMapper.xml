@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.video.dao.ITMerchantPriceMapper" >
+  <resultMap id="BaseResultMap" type="com.video.model.TMerchantPrice" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="merchan_id" property="merchanId" jdbcType="VARCHAR" />
+    <result column="month_card_price" property="monthCardPrice" jdbcType="DECIMAL" />
+    <result column="season_card_price" property="seasonCardPrice" jdbcType="DECIMAL" />
+    <result column="year_card_price" property="yearCardPrice" jdbcType="DECIMAL" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, merchan_id, month_card_price, season_card_price, year_card_price, state, create_time
+  </sql>
+  
+	<!--批量添加-->
+  <insert id="insertBatch" parameterType="java.util.List" >
+    insert into t_merchant_price (id, 
+      merchan_id, month_card_price, season_card_price, year_card_price, 
+      state, create_time)
+    values
+		<foreach collection="list" item="item" separator=",">
+			(
+			#{item.id}, 
+      #{item.merchanId}, #{item.monthCardPrice}, #{item.seasonCardPrice}, #{item.yearCardPrice}, 
+      #{item.state}, #{item.createTime})
+		</foreach>
+  </insert>
+  
+	<!--根据主键Id删除-->
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_merchant_price
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  
+	<!--根据主键Id查询-->
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_merchant_price
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+	<!--根据主键Id修改-->
+  <update id="updateByPrimaryKeySelective" parameterType="com.video.model.TMerchantPrice" >
+    update t_merchant_price
+    <set >
+      <if test="merchanId != null" >
+        merchan_id = #{merchanId,jdbcType=VARCHAR},
+      </if>
+      <if test="monthCardPrice != null" >
+        month_card_price = #{monthCardPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="seasonCardPrice != null" >
+        season_card_price = #{seasonCardPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="yearCardPrice != null" >
+        year_card_price = #{yearCardPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="state != null" >
+        state = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+	<!--根据类属性查询集合-->
+  <select id="selectListByClassElement" resultMap="BaseResultMap" parameterType="com.video.model.TMerchantPrice" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_merchant_price
+    <where >
+      <if test="merchanId != null" >
+        and merchan_id = #{merchanId,jdbcType=VARCHAR}
+      </if>
+      <if test="monthCardPrice != null" >
+        and month_card_price = #{monthCardPrice,jdbcType=DECIMAL}
+      </if>
+      <if test="seasonCardPrice != null" >
+        and season_card_price = #{seasonCardPrice,jdbcType=DECIMAL}
+      </if>
+      <if test="yearCardPrice != null" >
+        and year_card_price = #{yearCardPrice,jdbcType=DECIMAL}
+      </if>
+      <if test="state != null" >
+        and state = #{state,jdbcType=INTEGER}
+      </if>
+      <if test="createTime != null" >
+        and create_time = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+    </where>
+  </select>
+  
+	<!--根据类属性查询-->
+  <select id="selectByClassElement" resultMap="BaseResultMap" parameterType="com.video.model.TMerchantPrice" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_merchant_price
+    <where >
+      <if test="merchanId != null" >
+        and merchan_id = #{merchanId,jdbcType=VARCHAR}
+      </if>
+      <if test="monthCardPrice != null" >
+        and month_card_price = #{monthCardPrice,jdbcType=DECIMAL}
+      </if>
+      <if test="seasonCardPrice != null" >
+        and season_card_price = #{seasonCardPrice,jdbcType=DECIMAL}
+      </if>
+      <if test="yearCardPrice != null" >
+        and year_card_price = #{yearCardPrice,jdbcType=DECIMAL}
+      </if>
+      <if test="state != null" >
+        and state = #{state,jdbcType=INTEGER}
+      </if>
+      <if test="createTime != null" >
+        and create_time = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+    </where>
+  </select>
+</mapper>

@@ -79,7 +79,8 @@ public class WholesalePriceServiceImpl implements WholesalePriceService {
                 vipName = "季卡";
             }
             int stock = vipCodesMapper.countByWhere(codes);
-            if(number+100 < stock) {
+            log.info("库存 stock ="+stock);
+            if(number+50 < stock) {
                 List<TWholesalePrice> tWholesalePrices = wholesalePriceMapper.selectBetween(vipType, number);
                 if(tWholesalePrices != null && tWholesalePrices.size()>0){
                     BigDecimal vipPrice = tWholesalePrices.get(0).getVipPrice();
@@ -111,7 +112,7 @@ public class WholesalePriceServiceImpl implements WholesalePriceService {
             codes.setMerchantId("Admin");
             codes.setVipState(1);
             int stock = vipCodesMapper.countByWhere(codes);
-            if(number+100 < stock) {
+            if(number+50 < stock) {
                 //每一百次一提交
                 int a = number;
                 int b = 100;

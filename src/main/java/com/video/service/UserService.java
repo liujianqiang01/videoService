@@ -1,6 +1,7 @@
 package com.video.service;
 
 
+import com.video.model.TMerchantPrice;
 import com.video.model.TUser;
 import com.video.util.TokenBean;
 
@@ -18,5 +19,6 @@ public interface UserService {
     List<TUser> getTuser(String openId);
     List<TUser> findUser(TUser user);
     int apply(String reason);
+    int applyPrice(TMerchantPrice merchantPrice);
 
 }

@@ -2,12 +2,15 @@ package com.video.controller;
 
 import com.video.enumUtil.ApiEnum;
 import com.video.model.TMerchant;
+import com.video.model.TMerchantPrice;
 import com.video.model.TUser;
 import com.video.service.MerchantService;
 import com.video.service.UserService;
 import com.video.util.ApiResponse;
 import com.video.util.TokenBean;
 import com.video.util.TokenUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -26,7 +30,7 @@ import java.util.List;
 @Controller
 @RequestMapping("/merchant")
 public class MerchantController {
-
+    private static Logger log = LoggerFactory.getLogger(MerchantController.class);
     @Autowired
     MerchantService merchantService;
     @Autowired
@@ -52,10 +56,10 @@ public class MerchantController {
             TMerchant merchantParam = new TMerchant();
             merchantParam.setMenchantId(tokenBean.getMerchantId());
             TMerchant merchantResult = merchantService.selectByWhere(merchantParam);
-            if(merchantResult != null){
+            if (merchantResult != null) {
                 merchant.setId(merchantResult.getId());
                 merchantService.updateByPrimaryKeySelective(merchant);
-            }else {
+            } else {
                 List<TMerchant> merchants = new ArrayList<>();
                 merchants.add(merchant);
                 merchantService.insertBatch(merchants);
@@ -72,10 +76,29 @@ public class MerchantController {
         TMerchant merchantp = new TMerchant();
         merchantp.setMenchantId(tokenBean.getMerchantId());
         TMerchant merchant = merchantService.selectByWhere(merchantp);
-        if(merchant != null) {
+        if (merchant != null) {
             return ApiResponse.success(merchant);
         } else {
             return ApiResponse.fail(ApiEnum.RESULT_NULL);
         }
+    }
+
+    @PostMapping("/applyPrice")
+    @ResponseBody
+    public ApiResponse applyPrice( TMerchantPrice merchantPrice) {
+        TokenBean tokenBean = TokenUtil.getToken();
+        TUser user = new TUser();
+        user.setUserType(1);
+        user.setMenchantId(tokenBean.getMerchantId());
+        List<TUser> userMer = userService.findUser(user);
+        if (userMer != null && userMer.size() > 0) {
+            merchantPrice.setCreateTime(new Date());
+            merchantPrice.setMerchanId(tokenBean.getMerchantId());
+            merchantPrice.setState(0);
+            log.info("价格调整申请入参："+merchantPrice.toString());
+            userService.applyPrice(merchantPrice);
+            return ApiResponse.success();
+        }
+        return ApiResponse.fail(ApiEnum.RETURN_ERROR);
     }
 }

@@ -1,12 +1,15 @@
 package com.video.service.impl;
 
 import com.video.dao.ITMerchantMapper;
+import com.video.dao.ITMerchantPriceMapper;
 import com.video.dao.ITUserMapper;
 import com.video.model.TMerchant;
+import com.video.model.TMerchantPrice;
 import com.video.model.TUser;
 import com.video.service.UserService;
 import com.video.util.TokenBean;
 import com.video.util.TokenUtil;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +28,8 @@ public class UserServiceImpl implements UserService {
     ITUserMapper userMapper;
     @Autowired
     ITMerchantMapper merchantMapper;
+    @Autowired
+    ITMerchantPriceMapper merchantPriceMapper;
     /**
      * 无论商户还是普通用户，第一次进入先绑定微信号的关系
      * 一个商户号不允许绑定多个商户
@@ -127,4 +132,18 @@ public class UserServiceImpl implements UserService {
         return 0;
     }
 
+    @Override
+    public int applyPrice(TMerchantPrice merchantPrice) {
+        List<TMerchantPrice> list = new ArrayList();
+        list.add(merchantPrice);
+        TMerchantPrice param = new TMerchantPrice();
+        param.setMerchanId(merchantPrice.getMerchanId());
+        param.setState(0);
+        TMerchantPrice tMerchantPrice = merchantPriceMapper.selectByClassElement(param);
+        if(tMerchantPrice != null) {
+            merchantPrice.setId(tMerchantPrice.getId());
+            return  merchantPriceMapper.updateByPrimaryKeySelective(merchantPrice);
+        }
+        return  merchantPriceMapper.insertBatch(list);
+    }
 }
