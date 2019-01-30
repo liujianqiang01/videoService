@@ -95,17 +95,19 @@ public class OrderServiceImpl implements OrderService {
             priceParam.setState(1);
             priceParam.setMerchanId(token.getMerchantId());
             TMerchantPrice merchantPrice = merchantPriceMapper.selectByClassElement(priceParam);
-            if(vipType == 1){
-                if(merchantPrice.getMonthCardPrice().compareTo(BigDecimal.ZERO) > 0 ){
-                    vipPrice.setVipPrice(merchantPrice.getMonthCardPrice());
-                }
-            }else  if(vipType == 2){
-                if(merchantPrice.getSeasonCardPrice().compareTo(BigDecimal.ZERO) >  0){
-                    vipPrice.setVipPrice(merchantPrice.getSeasonCardPrice());
-                }
-            }else  if(vipType == 3){
-                if(merchantPrice.getYearCardPrice().compareTo(BigDecimal.ZERO) > 0){
-                    vipPrice.setVipPrice(merchantPrice.getYearCardPrice());
+            if(merchantPrice != null) {
+                if (vipType == 1) {
+                    if (merchantPrice.getMonthCardPrice().compareTo(BigDecimal.ZERO) > 0) {
+                        vipPrice.setVipPrice(merchantPrice.getMonthCardPrice());
+                    }
+                } else if (vipType == 2) {
+                    if (merchantPrice.getSeasonCardPrice().compareTo(BigDecimal.ZERO) > 0) {
+                        vipPrice.setVipPrice(merchantPrice.getSeasonCardPrice());
+                    }
+                } else if (vipType == 3) {
+                    if (merchantPrice.getYearCardPrice().compareTo(BigDecimal.ZERO) > 0) {
+                        vipPrice.setVipPrice(merchantPrice.getYearCardPrice());
+                    }
                 }
             }
             if (vipPrice == null) {

@@ -1,6 +1,7 @@
 package com.video.model;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class TVipCodes implements Serializable {
     //
@@ -18,6 +19,16 @@ public class TVipCodes implements Serializable {
     //状态 0-失效，1-有效
     private Integer vipState;
     private String merchantId;
+
+    public Date getExportDate() {
+        return exportDate;
+    }
+
+    public void setExportDate(Date exportDate) {
+        this.exportDate = exportDate;
+    }
+
+    private Date exportDate;
     private static final long serialVersionUID = 1L;
 
     public Integer getId() {

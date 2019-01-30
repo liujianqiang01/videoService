@@ -8,6 +8,10 @@ import com.video.service.VipCodesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -20,6 +24,7 @@ public class VipCodesServiceImpl implements VipCodesService {
 
     @Autowired
     private ITVipCodesMapper vipCodesMapper;
+
     @Override
     public int insertBatch(List<TVipCodes> record) {
         return vipCodesMapper.insertBatch(record);
@@ -51,14 +56,15 @@ public class VipCodesServiceImpl implements VipCodesService {
     }
 
     @Override
-    public PageInfo<TVipCodes> findPage(Integer pageNum, Integer pageSize ,TVipCodes vipCodes ) {
+    public PageInfo<TVipCodes> findPage(Integer pageNum, Integer pageSize, TVipCodes vipCodes) {
         PageInfo<TVipCodes> orderPageInfo = PageHelper.startPage(pageNum, pageSize).setOrderBy("id desc").doSelectPageInfo(() -> vipCodesMapper.selectListByWhere(vipCodes));
         return orderPageInfo;
     }
 
     @Override
     public int updateMerchantByPrimaryKey(TVipCodes vipCodes, List<Integer> list) {
-        return vipCodesMapper.updateMerchantByPrimaryKey(vipCodes,list);
+        vipCodes.setExportDate(new Date());
+        return vipCodesMapper.updateMerchantByPrimaryKey(vipCodes, list);
     }
 
 

@@ -131,6 +131,9 @@
       <if test="vipCodes.vipState != null" >
          vip_state = #{vipCodes.vipState,jdbcType=INTEGER}
       </if>
+      <if test="vipCodes.exportDate != null" >
+       , export_date = date_format(#{vipCodes.exportDate}, '%Y%m%d')
+      </if>
     </set>
     where id in
     <foreach collection="list" index="index" item="item" open="(" separator="," close=")">

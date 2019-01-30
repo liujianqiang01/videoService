@@ -23,7 +23,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -93,6 +95,7 @@ public class WholesaleOrderController {
         ExcelUtil.generateExcel(response,fileName,titles,listStr);
         TVipCodes update = new TVipCodes();
         update.setVipState(0);
+
         vipCodesService.updateMerchantByPrimaryKey(update,ids);
         log.info("====>会员卡导出成功 ！");
         return ApiResponse.success();
