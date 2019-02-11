@@ -48,6 +48,14 @@ public class VipPriceController {
         return ApiResponse.success(banners);
     }
 
+    @PostMapping("/getRecommend")
+    @ResponseBody
+    public ApiResponse getRecommend(){
+        List<String> recommend = new ArrayList<>();
+        recommend.add("https://filmunion.com.cn/video/image/shopping1.png");
+        recommend.add("https://filmunion.com.cn/video/image/shopping2.png");
+        return ApiResponse.success(recommend);
+    }
     @PostMapping("/getMVipType")
     @ResponseBody
     public ApiResponse getMVipType(){
