@@ -7,6 +7,7 @@ import com.video.model.TUser;
 import com.video.service.MerchantService;
 import com.video.service.UserService;
 import com.video.util.ApiResponse;
+import com.video.util.Base64ToImage;
 import com.video.util.TokenBean;
 import com.video.util.TokenUtil;
 import org.slf4j.Logger;
@@ -101,4 +102,18 @@ public class MerchantController {
         }
         return ApiResponse.fail(ApiEnum.RETURN_ERROR);
     }
+
+    @PostMapping("/saveImage")
+    @ResponseBody
+    public ApiResponse saveImage(String image) {
+        TokenBean tokenBean = TokenUtil.getToken();
+        //String path="/home/tomcat/apache-tomcat-8.5.37/webapps/video/image/erweima/"+ tokenBean.getMerchantId() +".jpg";
+        String path="/Users/liujianqiang/Desktop/project/videoService/src/main/webapp/image/erweima/"+ tokenBean.getMerchantId() +".jpg";
+        boolean b = Base64ToImage.generateImage(image, path);
+        if(b){
+          return ApiResponse.success(tokenBean.getMerchantId()+".jpg");
+        }
+        return ApiResponse.fail(ApiEnum.RETURN_ERROR);
+    }
+
 }
