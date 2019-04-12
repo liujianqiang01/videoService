@@ -1,5 +1,6 @@
 package com.video.common;
 
+import com.alibaba.druid.util.StringUtils;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 import com.thoughtworks.xstream.io.xml.XmlFriendlyNameCoder;
@@ -8,6 +9,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClients;
@@ -88,4 +90,19 @@ public class HttpRequest {
 			return null;
 		}
       }
+
+
+	public static String sendGet(String url, String param) throws Exception{
+		HttpGet httpGet = new HttpGet(url+param);
+		//设置请求器的配置
+		HttpClient httpClient = HttpClients.createDefault();
+		HttpResponse res = httpClient.execute(httpGet);
+		HttpEntity entity = res.getEntity();
+		String result = EntityUtils.toString(entity, "UTF-8");
+
+		if (StringUtils.isEmpty(result)) {
+			return null;
+		}
+		return  result;
+	}
 }

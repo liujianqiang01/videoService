@@ -68,6 +68,8 @@ public class LoginController {
         headerInfo.setToken(token.getToken());
         headerInfo.setMerchantId(token.getMerchantId());
         headerInfo.setUserType(token.getUserType());
+        //todo
+
         return ApiResponse.success(headerInfo);
     }
 
@@ -155,8 +157,12 @@ public class LoginController {
      */
     @PostMapping("/util")
     @ResponseBody
-    public ApiResponse util(String reason) {
+    public ApiResponse util(String device) {
         HeaderInfo headerInfo = new HeaderInfo();
+        log.info("设备类型：device=" + device);
+        if("android".equals(device)){
+            headerInfo.setShowPay(true);
+        }
         return ApiResponse.success(headerInfo);
     }
 

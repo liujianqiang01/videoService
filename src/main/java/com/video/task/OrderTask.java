@@ -20,7 +20,7 @@ public class OrderTask {
     /**
      * 未支付取消
      */
-    @Scheduled(cron = "0 0/10 * * * ?")
+    @Scheduled(cron = "0 0 0/2 * * ?")
     public void unPayTask(){
         log.info("------未支付取消定时开始---start-");
         orderService.unPayTask();

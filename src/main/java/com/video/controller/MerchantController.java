@@ -6,10 +6,7 @@ import com.video.model.TMerchantPrice;
 import com.video.model.TUser;
 import com.video.service.MerchantService;
 import com.video.service.UserService;
-import com.video.util.ApiResponse;
-import com.video.util.Base64ToImage;
-import com.video.util.TokenBean;
-import com.video.util.TokenUtil;
+import com.video.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -86,7 +84,7 @@ public class MerchantController {
 
     @PostMapping("/applyPrice")
     @ResponseBody
-    public ApiResponse applyPrice( TMerchantPrice merchantPrice) {
+    public ApiResponse applyPrice(TMerchantPrice merchantPrice) {
         TokenBean tokenBean = TokenUtil.getToken();
         TUser user = new TUser();
         user.setUserType(1);
@@ -96,7 +94,7 @@ public class MerchantController {
             merchantPrice.setCreateTime(new Date());
             merchantPrice.setMerchanId(tokenBean.getMerchantId());
             merchantPrice.setState(0);
-            log.info("价格调整申请入参："+merchantPrice.toString());
+            log.info("价格调整申请入参：" + merchantPrice.toString());
             userService.applyPrice(merchantPrice);
             return ApiResponse.success();
         }
@@ -105,15 +103,27 @@ public class MerchantController {
 
     @PostMapping("/saveImage")
     @ResponseBody
-    public ApiResponse saveImage(String image) {
+    public ApiResponse saveImage() throws Exception {
         TokenBean tokenBean = TokenUtil.getToken();
-        //String path="/home/tomcat/apache-tomcat-8.5.37/webapps/video/image/erweima/"+ tokenBean.getMerchantId() +".jpg";
-        String path="/Users/liujianqiang/Desktop/project/videoService/src/main/webapp/image/erweima/"+ tokenBean.getMerchantId() +".jpg";
-        boolean b = Base64ToImage.generateImage(image, path);
-        if(b){
-          return ApiResponse.success(tokenBean.getMerchantId()+".jpg");
+        String path="/home/tomcat/apache-tomcat-8.5.37/webapps/video/image/erweima/"+ tokenBean.getMerchantId() +".jpg";
+        //String path = "/Users/liujianqiang/Desktop/project/videoService/src/main/webapp/image/erweima/" + tokenBean.getMerchantId() + ".jpg";
+        byte[] codeM = ErweimaUtil.getCodeM(tokenBean.getMerchantId());
+        if (codeM != null) {
+            InputStream inputStream = new ByteArrayInputStream(codeM);
+            OutputStream outputStream = null;
+            File file = new File(path);
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            outputStream = new FileOutputStream(file);
+            int len = 0;
+            byte[] buf = new byte[1024];
+            while ((len = inputStream.read(buf, 0, 1024)) != -1) {
+                outputStream.write(buf, 0, len);
+            }
+            outputStream.flush();
+            return ApiResponse.success(tokenBean.getMerchantId() + ".jpg");
         }
         return ApiResponse.fail(ApiEnum.RETURN_ERROR);
     }
-
 }
